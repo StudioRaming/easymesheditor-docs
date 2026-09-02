@@ -1,0 +1,38 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.시작하기": {
+    "message": "시작하기",
+    "description": "The label for category '시작하기' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.탭별 사용법": {
+    "message": "탭별 사용법",
+    "description": "The label for category '탭별 사용법' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.작업 흐름": {
+    "message": "작업 흐름",
+    "description": "The label for category '작업 흐름' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.레퍼런스": {
+    "message": "레퍼런스",
+    "description": "The label for category '레퍼런스' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.내부 동작": {
+    "message": "내부 동작",
+    "description": "The label for category '내부 동작' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.패치노트": {
+    "message": "패치노트",
+    "description": "The label for category '패치노트' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.패치노트.link.generated-index.title": {
+    "message": "패치노트",
+    "description": "The generated-index page title for category '패치노트' in sidebar 'docsSidebar'"
+  },
+  "sidebar.docsSidebar.category.패치노트.link.generated-index.description": {
+    "message": "버전별 변경 사항입니다. 최신 버전이 위에 있습니다.",
+    "description": "The generated-index page description for category '패치노트' in sidebar 'docsSidebar'"
+  }
+}

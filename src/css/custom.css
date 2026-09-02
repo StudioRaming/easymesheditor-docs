@@ -1,0 +1,125 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/**
+ * Glossary auto-links (src/remark/auto-link-terms.mjs).
+ *
+ * Every Easy Mesh Editor term links to the page that defines it, which is a lot of
+ * links in running prose. Full link colour would turn a paragraph into a wall,
+ * so these keep the text colour and carry a dotted underline instead - present
+ * enough to invite a click, quiet enough to read past.
+ */
+.markdown a.eme-term {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed var(--ifm-color-primary);
+  transition: color 0.12s ease, border-bottom-color 0.12s ease;
+}
+
+.markdown a.eme-term:hover {
+  color: var(--ifm-link-color);
+  border-bottom-style: solid;
+}
+
+/* Inside admonitions the dashed rule fights the coloured panel. */
+.markdown .theme-admonition a.eme-term {
+  border-bottom-color: currentColor;
+  opacity: 0.95;
+}
+
+/* A term inside a table cell is usually already terse; keep it flat. */
+.markdown table a.eme-term {
+  border-bottom-style: dotted;
+}
+
+/* The version badge in the navbar. It is a link to the current patch note, so
+   it has to read as pressable rather than as a label sitting next to one. */
+.navbar__item.navbar__version {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  margin-left: 0.35rem;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  color: var(--ifm-navbar-link-color);
+}
+
+.navbar__item.navbar__version:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* In the collapsed mobile menu the pill sits in a full-width list, where a
+   rounded chip stretched across the row looks like a broken button. */
+@media (max-width: 996px) {
+  .navbar-sidebar .navbar__version {
+    display: inline-block;
+    margin: 0.25rem 0 0.25rem 0.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The patch-note index.
+
+   Docusaurus renders a category's generated index as a two-column grid of
+   equal tiles. A version history is not a set of peers to browse - it is read
+   top to bottom, newest first, and the subtitle carries as much as the number
+   does. So it becomes one full-width row per version.
+
+   This site has exactly one generated index, so the rule is unscoped on
+   purpose; adding a second one would inherit this layout, which is a decision
+   to make then rather than a bug.
+   ------------------------------------------------------------------------ */
+article > section.row > [class*='docCardListItem'] {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+article > section.row > [class*='docCardListItem'] + [class*='docCardListItem'] {
+  margin-top: 0.75rem;
+}
+
+/* The theme truncates both lines to fit a narrow tile. Across the full width
+   the subtitle has room to say what the release was, so let it wrap. */
+article > section.row .theme-doc-card-description {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  margin-bottom: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+article > section.row .theme-doc-card-heading {
+  margin-bottom: 0.3rem;
+  font-size: 1.15rem;
+}

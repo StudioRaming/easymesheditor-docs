@@ -1,0 +1,35 @@
+---
+id: third-party-credits
+title: 제3자 표기
+sidebar_position: 92
+---
+
+# 제3자 표기
+
+**이 문서를 읽으면** 이 제품에 다른 곳의 코드가 들어 있는지, 알고리즘을 어디서 참조했는지 알 수 있습니다.
+
+## 포함된 제3자 코드
+
+**없습니다.**
+
+Easy Mesh Editor `0.1.1` 패키지에는 외부 라이브러리, 오픈소스 코드, 제3자 에셋이 포함되어 있지 않습니다. 배포되는 것은 다음 셋입니다.
+
+- `Editor/EasyMeshEditor.Editor.dll` — Studio Raming이 작성한 코드
+- `Editor/Shaders/EmeOverlay.shader` · `Editor/Shaders/EmeSceneGL.shader` — Studio Raming이 작성한 씬뷰 표시용 셰이더
+- `README.md`
+
+Unity 엔진 API는 Unity Technologies의 것이며 이 제품에 재배포되지 않습니다.
+
+## 알고리즘 참조
+
+`스컬프트` 탭의 `엘라스틱 (1)` 브러시는 아래 논문의 변형 모델을 구현한 것입니다. 코드를 가져온 것이 아니라 공개된 수식을 참조해 직접 구현했으므로 라이선스 의무가 아니라 **출처 표기**입니다.
+
+> Fernando de Goes, Doug L. James. *Regularized Kelvinlets: Sculpting Brushes based on Fundamental Solutions of Elasticity.* ACM Transactions on Graphics (SIGGRAPH), 2017.
+
+창의 설명이 말하는 동작이 여기서 나옵니다 — `정규화 Kelvinlet과 C2 소프트 테일로 경계가 끊기지 않고 퍼집니다.` → [스컬프트](/guides/sculpt#엘라스틱)
+
+## 이 제품의 라이선스
+
+포함된 DLL, 셰이더, 에셋 파일의 재배포·재판매·유출을 금지합니다.
+
+문의: `studioraming@gmail.com`

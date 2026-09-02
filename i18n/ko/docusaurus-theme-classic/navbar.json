@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Easy Mesh Editor",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Easy Mesh Editor",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Docs": {
+    "message": "문서",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.패치노트": {
+    "message": "패치노트",
+    "description": "Navbar item with label 패치노트"
+  },
+  "item.label.v0.1.1": {
+    "message": "v0.1.1",
+    "description": "Navbar item with label v0.1.1"
+  }
+}
