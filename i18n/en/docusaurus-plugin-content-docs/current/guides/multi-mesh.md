@@ -1,69 +1,63 @@
 ---
 id: multi-mesh
-title: Multiple Meshes
+title: Multiple meshes
 sidebar_position: 6
 ---
 
-# Multiple Meshes
+# Multiple meshes
 
-**After reading this document**, you'll understand what gets applied together and what applies only to the active target when handling multiple meshes in one session, how the shared gizmo works, and what happens to the rest if one fails.
+**After reading this page** you will know what applies to every mesh and what applies only to the active target when you edit several meshes in one session, how the shared gizmo works, and what happens when one operation fails.
 
-## Open Multiple Meshes Together
+## Loading together
 
-Select multiple objects in the Hierarchy and press `Load`. The window tells you first: `Pressing Load will open all {0} selected meshes together.` After opening: `Editing {0} meshes together`.
+Select several objects in the Hierarchy and press `Load`. All of them join the same session.
 
-Renderers that share the same source mesh are automatically filtered out — `({0} skipped: same source mesh)`. Editing the same mesh twice would cause them to overwrite each other.
+Renderers that share one source mesh are also loaded and edited **separately**. They are not excluded. Each renderer's result is saved on its own, and the output is split per renderer so that files do not overwrite each other. → [Generated files](/reference/output-files#provenance와-owner)
 
-Different topology and vertex counts are fine. Each mesh calculates from its own data separately.
+The meshes may have different topology and different vertex counts. Each one is calculated with its own data.
 
-## Active Target {#활성-대상}
+## Active target {#활성-대상}
 
-Use the `Active target` selector to change which mesh has focus. What gets applied together and what applies only to the active target is divided.
-
-> `Sculpt and Edit apply to all loaded meshes. BlendShape and Weight apply to the active target.`
+The `Active target` selector changes which mesh has focus. Some operations apply to every mesh, and others apply only to the active target.
 
 | Tab | Scope |
 |---|---|
-| `Sculpt` | All loaded meshes |
-| `Edit` | Keeps selection across all meshes, transforms together with shared gizmo |
-| `BlendShape` | All meshes simultaneously for keys with names in common |
-| `Weight` | One active target only |
+| `Shape` | Every loaded mesh |
+| `Select & Move` | Keeps the selection on every mesh, and transforms them together with the shared gizmo |
+| `Shape Keys` | Keys with the same name apply to every mesh at the same time |
+| `Bone Weights` | The active target only |
 
-## Shared Gizmo in Edit Tab
+Delete and separate apply only to the active mesh.
 
-When you select elements from different meshes, the status changes to: `Multiple meshes — {0} selected in {1} · transforms with shared gizmo (delete/separate apply to active mesh)`.
+## The shared gizmo on Select & Move
 
-- Transform is applied **with one gizmo in world space** to all meshes together.
-- Local axis for `G`/`R`/`S` [modal transforms](/guides/edit#모달-변형) can't be well-defined, so it falls back to `Multiple meshes → world axis`.
-- `A` (select all), `Alt+A` (deselect), `Ctrl+I` (invert) apply to all targets.
-- **Delete and separate apply only to the active mesh.**
+When you select elements in several meshes, one **world-space gizmo** transforms all of them together.
 
-The `Per-mesh Uniform Pivot` option in [Pivot](/guides/edit#피벗) makes each mesh use its own pivot.
+- `G` / `R` / `S` [modal transforms](/guides/edit#모달-변형) use world axes. Several meshes do not have one shared local axis.
+- `A` (select all), `Alt+A` (clear), and `Ctrl+I` (invert) apply to every target.
 
-Symmetry matching, selection, and brush influence always calculate independently for each mesh.
+Turn on `Per-mesh pivot` under [Pivot](/guides/edit#피벗) to give each mesh its own pivot.
 
-## Name Intersection in BlendShape
+Symmetry partners, selection, and brush influence are always calculated for each mesh separately.
 
-All targets must be `SkinnedMeshRenderer`. The list shows only **keys with the same name on every target.**
+## Shape key name intersection {#표정-키}
 
-> `Shows only keys present on all {0} meshes. Values, editing, and management apply to all meshes simultaneously.`
+To edit shape keys across several meshes, every target must be a `SkinnedMeshRenderer`. The list shows **only the keys that have the same name on every target**.
 
-Indices can differ — only names matter. If there are no common keys, the list is empty. New keys created have the same name added to all meshes. → [BlendShape](/guides/blendshape#다중-메쉬-키)
+Indexes can differ, because matching is by name only. Values, editing, and management apply to all meshes at the same time. If there are no common keys, the list is empty, and a new key is added to every mesh under the same name. → [Shape Keys](/guides/blendshape#다중-메쉬-키)
 
-## Atomic Rollback {#원자적-롤백}
+## Atomic rollback {#원자적-롤백}
 
-Operations that change structure on multiple meshes (batch delete, reorder, key transfer, separate, …) **either all succeed or all roll back.** If one fails, snapshots of all targets are restored.
+Operations that change the structure of several meshes (batch delete, reorder, importing keys, separate) either **all succeed or all roll back.** If one step fails, every target goes back to its state before the operation.
 
-> `Batch failed, reverted all meshes to pre-operation state. Check the console log.`
+Undo works the same way. A multi-mesh operation is grouped into one undo step. → [Session and undo](/internals/session-and-undo)
 
-Undo works the same way. Multi-mesh operations are bundled as one compound undo step. → [Session and Undo](/internals/session-and-undo)
+## Save Mesh works per mesh
 
-## Bake Is Per-mesh
+`Save Mesh` creates a separate `<source name>_Edit.asset` for each target. Unlike the rollback rule, here only the targets that succeed are written, and a failed target keeps its session open.
 
-`Bake` creates its own `<original>_Edit.asset` for each target. Unlike rollback rules, only successful ones are written and failed sessions stay open.
-
-Results organize in a `Bake results ({0}/{1} succeeded)` table in the window. → [Using the Window](/guides/window#상태-배지)
+The result appears as a foldable table that shows success or failure for each target. → [Using the window](/guides/window#저장-결과표)
 
 ## Performance
 
-Opening multiple high-density meshes increases the cost of Scene view overlay, box picking, skin pose calculation, and brush processing. If it feels noticeably heavy, pick only the meshes you need and open them one by one from the `Load candidates` list. → [Using the Window](/guides/window#불러올-후보)
+Opening several high-density meshes increases the cost of the Scene view overlay, box picking, skin pose calculation, and brush processing. If it feels heavy, load only the meshes you need. You can load them one row at a time from the candidate list. → [Using the window](/guides/window#불러올-후보)

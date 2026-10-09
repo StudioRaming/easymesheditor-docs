@@ -1,95 +1,103 @@
 ---
 id: sculpt
-title: Sculpt
+title: Shape
 sidebar_position: 2
 ---
 
-# Sculpt
+# Shape
 
-**After reading this document**, you'll know what each of the 5 brushes does, how to adjust radius, strength, falloff, and pressure, how to turn on and see symmetry, and how to use mask mode to protect areas you shouldn't touch.
+**After reading this page** you will know what each of the five brushes does, how to adjust radius, strength, falloff, and pen pressure, how to turn on symmetry and check it, and how to use masks to keep areas from being changed.
 
-The `Sculpt` tab is the one where dragging in the Scene view makes the surface follow. It works based on the pose you see right now, so on a skinned mesh, it grabs the screen-space position with animation already applied.
+The `Shape` tab is where the surface follows your drag in the Scene view. It works on the pose you see now, so on a skinned mesh it grabs the position on screen with the animation applied.
 
 ## Brushes {#브러시}
 
 | Brush | Key | What it does |
 |---|---|---|
-| `Elastic (1)` | `1` | Pulls the surface elastically in the drag direction |
-| `Smooth (2)` | `2` | Smooths the surface by averaging neighboring vertices |
-| `Flatten (3)` | `3` | Pushes the brush area toward a weighted plane to flatten it |
-| `Pinch (4)` | `4` | Gathers vertices toward the brush center |
-| `Inflate (5)` | `5` | Puffs outward along the normal |
+| `Pull (1)` | `1` | Pulls the surface elastically in the direction you drag |
+| `Smooth (2)` | `2` | Softens the surface by averaging neighboring vertices |
+| `Flatten (3)` | `3` | Flattens the surface toward the weighted plane of the brush area |
+| `Gather (4)` | `4` | Gathers the surface toward the brush center along the tangent plane. It does not push into the body |
+| `Inflate (5)` | `5` | Inflates the surface along the vertex normals |
 
-On all brushes, holding `Ctrl` reverses the direction (shrink, opposite plane, spread instead of gather), and holding `Shift` temporarily switches to the Smooth brush.
+Hold `Ctrl` to reverse the direction. Flatten goes to the other side, Gather spreads outward, and Inflate shrinks. Hold `Shift` to switch to Smooth for that moment only.
 
-### Elastic {#엘라스틱}
+Smooth, Flatten, Gather, and Inflate stamp once with a single click, without dragging. Pull moves the surface only while you drag.
 
-The default brush for pushing and pulling while preserving volume. It fixes the influence set at the moment of click, then applies a normalized Kelvinlet deformation, so areas outside the brush radius smoothly follow along with a soft tail.
+### Pull {#엘라스틱}
 
-As the window explains — `Normalized Kelvinlet with C2 soft tail for seamless gradation at boundaries. Higher strength increases both influence range and gradient.` Raising strength can extend the tail influence to roughly 2.5× the radius at maximum.
+This is the basic brush for pushing and pulling while keeping volume. It pulls the surface elastically in the direction you drag. A higher strength widens the soft tail outside the brush radius, which reaches up to about `2.5 × radius`.
 
-Use this brush to push in places where clothing pierces the body, or to puff the entire silhouette. → [Clothing Fit](/workflow/clothing-fit)
+Use this brush to push in the spot where clothing cuts into the body, or to inflate a whole silhouette. → [Clothing fit](/workflow/clothing-fit)
 
 ### Smooth and Flatten
 
-`Smooth (2)` removes bumps, `Flatten (3)` brings surfaces close to flat. Both work with a single click (no dragging).
+`Smooth (2)` removes bumps, and `Flatten (3)` makes the surface closer to a plane. Both stamp once with a single click.
 
-## Brush Settings {#브러시-설정}
+## Brush settings {#브러시-설정}
 
 | Item | Range | Description |
 |---|---|---|
-| `Radius` | 0.001 ~ 2 | Brush size. Also adjust with `[` `]` |
-| `Strength` | 0 ~ 1 | Effect per stroke. Also adjust with `,` `.` (same as `<` `>`) |
-| `Tablet Pressure` | on/off | Multiplies tablet pressure into strength. Pressure holds within one stroke |
-| `Range Display` | 0.05 ~ 1 | Opacity of the brush influence indicator drawn in the Scene view |
-| `Falloff` | `Smooth` · `Sphere` · `Sharp` · `Constant` | How influence decreases from center to edge |
+| `Radius` | 0.001 to 2 | Brush size. You can also adjust it with `[` and `]` |
+| `Strength` | 0 to 1 | Amount of one application. You can also adjust it with `,` and `.` (`<` and `>`) |
+| `Range display` | 0.05 to 1 | Opacity of the brush influence drawn in the Scene view |
+| `Falloff` | `Smooth` · `Sphere` · `Sharp` · `Constant` | The shape of the influence from the center to the edge |
 
-Press `F` to open a modal where you move the mouse left/right to adjust radius. Click to confirm, `Esc` to cancel. `Shift+F` does the same for strength.
+Press `F` to open a modal in which moving the mouse left and right changes the radius. Click to confirm, and press `Esc` to cancel. `Shift+F` adjusts the strength the same way.
 
-### Brush Presets {#브러시-프리셋}
+### Pen pressure {#필압-적용량}
 
-The `Brush Presets` section has 3 slots. Press `Save` and the current brush type, radius, strength, falloff, and pressure settings go into that slot. Press a slot to restore them exactly. Unused slots show `Empty`.
+If you use a pen tablet, set how pressure applies in the `Advanced` settings.
 
-Presets are saved to the editor, so they survive closing and re-opening the project.
+- Set **Pressure size** and **Pressure strength** separately, each from `0%` to `100%`.
+- `0%` keeps that value fixed. `100%` follows the pen pressure directly.
+- You can use size only, strength only, or both. The **Size** and **Strength** values you set stay unchanged.
+- A mouse, or a device without pressure support, uses the radius and strength you set.
+- Pen input uses the pressure that reaches Unity, so the Windows tablet driver must send pressure.
+- This setting applies to `Shape` only. Other tabs keep their behavior.
+
+### Brush presets {#브러시-프리셋}
+
+Below the brush settings there are three preset slots. Click an empty slot to save the current brush type, radius, strength, and falloff. Click a saved slot to load those settings again. Right-click a slot, or turn on the save toggle and click a slot, to overwrite it.
 
 ## Symmetry {#대칭}
 
-Turn on `Symmetry` by combining X / Y / Z. Scene view shortcuts are `Shift+Alt+X` · `Shift+Alt+Y` · `Shift+Alt+Z`, same notation as the `Edit` tab. Solo `X` `Y` `Z` are left for Unity's tool handle shortcuts and not intercepted. → [Shortcuts](/reference/shortcuts#스컬프트)
+Turn on symmetry by combining X / Y / Z in `Symmetry`. The Scene view shortcuts are `Alt+Shift+X`, `Alt+Shift+Y`, and `Alt+Shift+Z`. Plain `X`, `Y`, and `Z` stay as Unity's tool handle shortcuts, so this tool does not capture them. → [Shortcuts](/reference/shortcuts#모양-다듬기)
 
-:::note[Symmetry works even if vertex counts don't match exactly]
-Left-right topology doesn't need to be perfect. It finds matching points in space based on local bind-pose position. Vertices with no match just skip symmetry processing.
+:::note[Symmetry works even when the vertex counts do not match exactly]
+The left and right topology does not have to be identical. The tool finds matching points by spatial position. A vertex with no match is left out of the symmetric edit.
 :::
 
-Turn on `Show Symmetry Plane` to see the mirror plane and opposite-side brush position drawn in the Scene view. Check visually which axis symmetry is locked to before you start.
+Turn on `Show symmetry plane` to draw the mirror plane and the brush cursor on the opposite side in the Scene view. Check which axis the symmetry uses before you start.
 
-## Mask Mode {#마스크-모드}
+## Mask mode {#마스크-모드}
 
-Press `M` to enter. Masked vertices are drawn darker and are excluded from both the Sculpt brush and [Proportional Editing](/guides/edit#프로포셔널-편집) in the `Edit` tab.
+Press `M` to enter. Masked vertices are drawn darker and are left out of Shape brushes and of [proportional editing](/guides/edit#프로포셔널-편집) on the `Select & Move` tab.
 
-Three sub-modes:
+There are three methods.
 
-| Sub-mode | Operation |
+| Method | Operation |
 |---|---|
-| `Island` | Click = toggle mask for that connected component |
-| `Brush` | Drag = paint in radius, `Ctrl` = erase |
-| `Box` | Drag rectangle on screen, `Shift` = add, `Ctrl` = remove |
+| `Island` | Click to add or remove the whole connected piece |
+| `Brush` | Drag to paint with the radius. Hold `Ctrl` to erase |
+| `Box` | Drag a rectangle on screen. `Shift` adds, `Ctrl` removes |
 
-Hover preview shows cyan for pending apply, red for pending erase.
+While hovering, cyan means the area will be added to the mask, and red means it will be removed.
 
-- `Ctrl+I` — `Invert Mask (Ctrl+I)`
-- `Alt+M` — `Clear All Mask (Alt+M)`
+- `Ctrl+I`: invert the mask
+- `Alt+M`: clear the whole mask
 
-When symmetry is on, island masks also process the matching island on the other side. Mask changes can be undone with `Ctrl+Z`.
+Mask changes can also be undone with `Ctrl+Z`.
 
 ## X-Ray
 
-Turn on with `Alt+Z`. When off, occluded vertices don't get caught by the brush. When on, it penetrates through to the back side. Use it when you need to work on the inside of thin clothing.
+Turn it on with `Alt+Z`. When it is off, hidden vertices cannot be hit by the brush. When it is on, the brush goes through to the back side. Turn it on when you need to work on the inside of a thin piece of clothing.
 
-## Save Sculpt Results
+## Saving the result of Shape
 
-Sculpt directly changes the base mesh. When you're done, you have two paths:
+Shape changes the base mesh directly. When you finish, you have two choices.
 
-- **`Bake`** — Bake the changed shape straight into the mesh asset.
-- **`Save as New Key`** — Keep the base mesh and save only the changes you added as a blend shape key.
+- **`Save Mesh`**: saves the changed shape as a mesh asset as it is.
+- **`Save as New Key`**: stores only the change you added as a blend shape key, and keeps the base mesh as it is.
 
-If the base mesh is changed and you press `Bake`, the window asks: `There are edits made without a selected key. Commit them as a new key before baking, or bake them into the base mesh?` → [BlendShape](/guides/blendshape#기본형-직접-수정)
+If you press `Save Mesh` after changing the base mesh with no key selected, the window asks whether to confirm the change as a new key or to bake it into the base mesh. → [Shape Keys](/guides/blendshape#기본형-직접-수정)

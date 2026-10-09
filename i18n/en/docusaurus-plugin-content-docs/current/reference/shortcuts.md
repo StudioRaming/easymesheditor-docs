@@ -6,114 +6,101 @@ sidebar_position: 1
 
 # Shortcuts
 
-**After reading this document**, you can find what each key does in one table per tab. To see the same content in the window, press the `Keys` button in the Scene view hint bar. → [Shortcut Sheet](/guides/window#단축키-시트)
+**After reading this page** you will be able to find, in one table per tab, which key does what. To see the same content inside the window, press the `Keys` button on the Scene view hint bar. → [Shortcut sheet](/guides/window#단축키-시트)
 
-:::note[Works only in the Scene view]
-Keys listed here are processed when the mouse is over the Scene view. They're not intercepted during text input, and don't change Unity's global Shortcut profile.
+:::note[Works in the Scene view only]
+The keys listed here are handled while the mouse is over the Scene view. They are not captured while you type in a text field, and they do not change Unity's global Shortcut profile.
 :::
 
-## Global {#공통}
+## Common {#공통}
 
-Works in all tabs.
+These work on every tab.
 
 | Key | What it does |
 |---|---|
-| `Tab` | `Toggle Editing` |
-| `Ctrl+Tab` | `Cycle Tool Tabs` (next tab) |
-| `Ctrl+Shift+Tab` | Previous tab |
-| `Ctrl+Z` / `Ctrl+Y` | `Undo / Redo` |
-| `Enter` / `Esc` | `Commit / Cancel Transaction` |
-| `[` / `]` | `Brush Radius` |
-| `<` `>` `,` `.` | `Brush Strength` |
-| `Alt+Z` | X-Ray toggle |
+| `Tab` | Turn edit input on or off. The session stays alive |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous tab |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
+| `Enter` | Save the shape key edit (Cancel Key Edit is the button on the pinned bar) |
+| `Alt+Z` | Turn X-Ray on or off |
 
-`<` `>` are the same key as `,` `.`. `Shift` works the same.
-
-## Sculpt {#스컬프트}
+## Shape {#모양-다듬기}
 
 | Key | What it does |
 |---|---|
-| `1` / `2` / `3` | `Brush Elastic / Smooth / Flatten` |
-| `4` / `5` | `Brush Pinch / Inflate` |
-| `[` / `]` | `Decrease / Increase Radius` |
-| `,` / `.` | `Lower / Raise Strength` |
-| `F` / `Shift+F` | `Adjust Radius / Strength with Mouse (click confirm, Esc cancel)` |
-| `Shift` (held) | `Smooth Brush While Held` |
-| `Ctrl` (held) | `Reverse Brush Direction While Held` |
-| `Shift+Alt+X` / `Y` / `Z` | Toggle axis symmetry |
-| `M` | `Toggle Mask Mode` |
-| `Ctrl+I` | `Invert Mask` |
-| `Alt+M` | `Clear All Mask` |
-| `Alt+Z` | `X-Ray Toggle` |
+| `1` / `2` / `3` / `4` / `5` | Pull / Smooth / Flatten / Gather / Inflate |
+| `[` / `]` | Brush radius smaller / larger (×0.9) |
+| `,` / `.` (`<` / `>`) | Brush strength lower / higher (±0.05) |
+| `F` / `Shift+F` | Change radius / strength with the mouse (click to confirm, `Esc` to cancel) |
+| `Shift` (hold) | Smooth for as long as you hold it |
+| `Ctrl` (hold) | Reverse the brush direction |
+| Numpad `.` | Frame selection (fit the mesh being edited to the view) |
+| `Alt+Shift+X` / `Y` / `Z` | Turn axis symmetry on or off |
+| `M` | Mask mode |
+| `Ctrl+I` | Invert the mask |
+| `Alt+M` | Clear the whole mask |
 
-:::caution[`Keys` sheet symmetry notation differs from actual]
-The 0.1.1 `Keys` sheet lists symmetry as `X / Y / Z` and `Alt+X / Y / Z`, but the actual working keys are `Shift+Alt+X` / `Y` / `Z` like the `Edit` tab. Solo `X` `Y` `Z` and `Alt+Z` are left for Unity's tool handle shortcuts and X-Ray, not intercepted. You can also toggle with the `Symmetry` checkbox in the window.
+:::caution[Pressing `X` `Y` `Z` alone does not turn on symmetry]
+The symmetry shortcuts are `Alt+Shift+X` / `Y` / `Z`. Plain `X` `Y` `Z` stay as Unity's tool handle shortcuts, so this tool does not capture them. You can also use the `Symmetry` checkboxes in the window.
 :::
 
-## Edit {#편집}
+## Select & Move {#선택-이동}
 
 | Key | What it does |
 |---|---|
-| `1` / `2` / `3` | `Vertex / Edge / Face Mode` |
-| `Q` / `W` / `E` / `R` | `View / Move / Rotate / Scale Gizmo` |
-| `G` / `R` / `S` | `Mouse Modal Transform (requires selection)` |
-| `X` / `Y` / `Z` (during modal) | `Constrain to Axis During Modal (twice=world, Shift+axis=plane, number=exact)` |
-| `Alt+click` (no drag) | `Edge Loop` |
-| `Ctrl+Alt+click` | `Edge Ring` (`Shift` together = add) |
-| `Ctrl` + `+` / `-` | `Expand / Shrink Selection` |
-| `H` / `Alt+H` / `Shift+H` | `Hide / Show All / Hide Others` |
-| `A` / `Alt+A` / `Ctrl+I` | `Select All / Deselect / Invert` |
-| `B` / `L` / `O` | `Box Select / Linked Select / Proportional` |
-| `Shift+L` | `Deselect Linked` |
-| `X` / `Delete` / `Backspace` | Delete selection |
-| `P` / `Shift+P` | `Separate Selection / Separate by Islands` |
-| `Esc` | Clear box select mode or deselect |
-| `Alt+Z` | X-Ray |
-| `Shift+Alt+X` / `Y` / `Z` | Toggle axis symmetry |
-| `[` / `]` | If proportional on: radius; if in vertex mode: vertex display size |
+| `1` / `2` / `3` | Vertex / edge / face mode |
+| `A` / `Alt+A` / `Ctrl+I` | Select all / clear / invert |
+| `B` | Box select (`Shift` adds, `Ctrl` removes) |
+| `L` / `Shift+L` | Select / deselect the connected element |
+| `Alt+click` | Edge loop (only on a click without dragging) |
+| `Ctrl+Alt+click` | Edge ring (hold `Shift` as well to add) |
+| `Ctrl` + `+` / `-` | Grow / shrink the selection |
+| `Esc` | Clear the selection |
+| `Q` / `W` / `E` / `R` | View / Move / Rotate / Scale gizmo |
+| `G` / `R` / `S` | Modal move / rotate / scale with the mouse (requires a selection) |
+| `X` `Y` `Z` during the modal | Constrain to an axis. Press again for the world axis |
+| `Shift` + axis during the modal | Constrain to a plane |
+| Numbers / `Enter` / `Esc` during the modal | Type an exact value / confirm / cancel |
+| `O` | Turn proportional editing on or off |
+| `[` / `]` | Proportional radius (vertex display size when proportional editing is off) |
+| `Alt+Shift+X` / `Y` / `Z` | Turn axis symmetry on or off |
+| `H` / `Shift+H` / `Alt+H` | Hide selected / hide unselected / show all |
+| `P` / `Shift+P` | Separate selection / separate islands |
+| `X` or `Delete` | Delete the selection |
 
-:::caution[`R` does two things depending on context]
-`R` is a rotation modal only when **you have a selection and the cursor is over the Scene view.** Otherwise it works normally as Unity's `R` = Scale gizmo.
+:::caution[`R` does one of two things, depending on context]
+`R` opens the rotate modal only when something is selected and the cursor is over the Scene view. Otherwise `R` is Unity's scale gizmo.
 :::
 
-:::caution[`Alt+drag` still rotates the scene]
-Edge loop selection only happens when you **don't move while holding `Alt`.** If you drag even a little, the camera rotates normally.
+:::caution[`Alt+drag` still rotates the Scene view]
+Loop selection with `Alt` happens only on a click that moved less than 3 px. If you drag further, the camera rotates as usual.
 :::
 
-## BlendShape {#블렌드쉐이프}
+Combinations that include `Ctrl` or `Cmd` (`Ctrl+P`, `Ctrl+R`, `Ctrl+X`, and so on) stay as Unity shortcuts and do not run a Select & Move action. The exceptions are `Ctrl+A`, `Ctrl+I`, and `Ctrl` + `+` / `-`.
 
-This tab doesn't register its own list on the `Keys` sheet, so you see `This tab has no registered shortcuts.` The actual working keys are below.
-
-| Key | What it does | Condition |
-|---|---|---|
-| `N` | Start sculpting new shape | When not sculpting or editing |
-| `Esc` | Clear solo preview | When no transaction and solo is on |
-| `Enter` | Save sculpt | During sculpt |
-| `Esc` | Cancel sculpt | During sculpt |
-| `F` / `Shift+F` | Radius / Strength modal | During sculpt |
-| `[` / `]` · `,` / `.` | Radius / Strength | During sculpt |
-| `Shift` (held) | Smooth brush | During sculpt |
-| `Alt+Z` | X-Ray | |
-
-## Weight {#웨이트}
+## Shape Keys {#표정-키}
 
 | Key | What it does |
 |---|---|
-| `1` / `2` / `3` | `Brush Add / Subtract / Smooth` |
-| `4` / `5` | `Brush Blur / Average` |
-| `[` / `]` | `Decrease / Increase Radius` |
-| `,` / `.` | `Lower / Raise Strength` |
-| `F` / `Shift+F` | `Adjust Radius / Strength with Mouse (click confirm, Esc cancel)` |
-| `Shift` (held) | `Smooth Brush While Held` |
-| `Ctrl` (held) | `Reverse Add / Subtract While Held` |
-| `N` | `Normalize All` |
-| `K` | `Apply Smooth to Checked Bones` |
-| `Ctrl+click` | `Set / Unset Active Bone in Scene` |
-| `Ctrl+Shift+click` | `Toggle Smooth Target Checkbox in Scene` |
-| `Alt+Z` | `X-Ray Toggle` |
+| `N` | Start sculpting a new key |
+| `Enter` | Save the key edit |
+| `Esc` | Cancel the stroke or clear solo. The key edit is not discarded |
+| `F` / `Shift+F` / `[` / `]` / `,` / `.` | Radius and strength while sculpting a key |
+| `Shift` (hold) | Smooth for as long as you hold it |
 
-:::note[`Symmetric Paint (X)` is not a key]
-The label says `(X)` but in the current version this option is toggled only by the window checkbox. → [Symmetric Paint](/guides/weight-paint#대칭-페인트)
+## Bone Weights {#뼈-연결}
+
+| Key | What it does |
+|---|---|
+| `1` / `2` / `3` / `4` / `5` | Add / Subtract / Smooth / Blur / Average |
+| `N` | Normalize all |
+| `K` | Smooth the checked bones (does nothing if no bone is checked) |
+| `Ctrl+click` | Set or clear the active bone in the Scene view |
+| `Ctrl+Shift+click` | Turn the smoothing check on or off in the Scene view |
+| `[` / `]` / `,` / `.` / `F` / `Shift+F` | Radius and strength (same as Shape) |
+| `Shift` (hold) | Temporary Smooth |
+| `Ctrl` (hold) | Reverse Add and Subtract |
+
+:::note[`Symmetric Paint` has no key]
+The label includes `(X)`, but in this version the option is turned on and off only with the checkbox in the window. → [Symmetric painting](/guides/weight-paint#대칭-페인트)
 :::
-
-`K` does nothing if there are no checked bones.

@@ -1,85 +1,81 @@
 ---
 id: bake
-title: Bake Details
+title: Save Mesh internals
 sidebar_position: 2
 ---
 
-# Bake Details
+# Save Mesh internals
 
-**After reading this document**, you'll know what `Bake` does in what order, when it cleans vertices and when it skips, and how meshes with 5+ bone influences are preserved.
+**After reading this page** you will know what `Save Mesh` (Bake) does and in what order, when it cleans up vertices and when it skips the cleanup, and how meshes with more than four bone influences per vertex are preserved.
 
-## Steps
+## Order
 
-1. If a transaction is open, abort.
-2. If work was done without auto-normalize, normalize weights once.
-3. Make a copy of the Work Mesh (don't touch the live one).
-4. [Clean orphan vertices](#고아-정점-정리) from the copy.
-5. Validate data — NaN/Infinity, topology, array lengths.
-6. Use `provenance` to determine the output path and write the asset.
-7. Make the renderer use the new asset and end the session.
+1. If a shape key edit is open, stop and ask you to finish the edit first.
+2. If you worked with auto normalize off, normalize the weights once.
+3. Make a copy of the Work Mesh. The live mesh is not touched.
+4. [Clean up unused vertices](#고아-정점-정리) on the copy.
+5. Validate the data: NaN, Infinity, topology, and array lengths.
+6. Choose the output path from the provenance record, and write the asset.
+7. Switch the renderer to the new asset, and end the session.
 
-Large meshes show progress bars — `Baking mesh` · `Cleaning unused vertices...` · `Saving mesh asset...`
+Large meshes show a progress bar.
 
-## Orphan Vertex Cleanup {#고아-정점-정리}
+## Cleaning up unused vertices {#고아-정점-정리}
 
-`Delete Selection (X · {0} faces)` deletes only triangles, leaving the vertex buffer intact. The live Work Mesh's indices are tied to selections, masks, undo snapshots. Recompacting during edit would break them all.
+`Delete` on `Select & Move` removes only the triangles and leaves the vertex buffer as it is. If vertices were reordered during editing, the indexes used by the selection, the masks, and the undo snapshots would all go out of step.
 
-So cleanup happens **once at `Bake` time, on the copy.** It removes vertices that no submesh triangle references, then remaps the rest.
+So the cleanup runs **once, on the copy, during `Save Mesh`**. It removes vertices that no submesh triangle uses, and it remaps the rest.
 
-Result: `Cleaned up {0} unused vertices`.
+Preserved: normals, tangents, UV0 to UV7, colors, bone weights (including variable influences), bindposes, and all blend shape frames.
 
-Preserved: normals, tangents, UV0~UV7, colors, bone weights (including variable influences), bindpose, all blend shape frames.
+The cleanup runs through the whole process on the staging copy, and the result is copied to the target only when every step succeeds. A half-rewritten mesh is never left behind.
 
-Cleanup is performed entirely on a staging copy and copied to the target only when completely successful. Half-rewritten meshes don't survive.
+### Cases where the cleanup is skipped
 
-### Cases Skipped
-
-| Condition | Message |
+| Condition | Result |
 |---|---|
-| Non-triangle submeshes (Quad/Line/Point) exist | `Skipped orphan vertex cleanup: the mesh has non-triangle submeshes (quads/lines/points).` |
-| Duplicate blend shape names exist | `Skipped orphan vertex cleanup: the mesh has duplicate blend shape names.` |
-| Cleanup itself fails | `Orphan vertex cleanup failed; the mesh was left unchanged.` |
+| A non-triangle submesh (Quad, Line, Point) is present | The cleanup is skipped. Nothing appears in the window; the reason goes to the console only when the diagnostics switch (EditorPrefs `StudioRaming.EasyMeshEditor.Diag`) is on |
+| A blend shape with the same name exists | The blend shape channels are copied as they are and the cleanup runs. Only when they cannot be copied exactly is the cleanup skipped, and then the reason goes to the diagnostic log only |
+| The cleanup itself fails | The mesh is left unchanged and the tool tells you |
 
-Skipping doesn't stop `Bake`. Vertices just won't be reduced.
+
+A skipped cleanup does not stop `Save Mesh`. Only the vertex count stays the same.
 
 ## Normals
 
-`Bake` doesn't arbitrarily recalculate normals. Only explicitly created ones during editing are reflected.
+`Save Mesh` does not recalculate normals on its own. Only the normals you explicitly created during editing are written.
 
-- `Recalculate Normals` — recalculates normals for selected vertices using area-weighted smooth.
-- `Flip Normals` — reverses winding of selected faces and also reverses normals and tangent deltas in blend shapes and vertex tangents.
-- When creating or editing blend shape keys, that key's normal deltas are recalculated area-weighted. All three paths (existing key save, new key save, `Save as New Key`) use the same route.
+- `Recalculate normals`: recalculates the normals of the selected vertices with area-weighted smoothing.
+- `Flip normals`: reverses the winding of the selected faces, and also reverses the blend shape normal and tangent deltas and the vertex tangents.
+- When you create or edit a shape key, the normal deltas of that key are recalculated with area weighting. This applies to saving a key edit, saving a new key, and `Save as New Key` alike.
 
-## Variable Bone Weight {#가변-본-웨이트}
+## Variable bone weights {#가변-본-웨이트}
 
-From Unity 2020.1, meshes can have 5+ bone influences per vertex. The legacy `BoneWeight` API only handles 4, so using it alone **cuts the entire mesh to 4-slot, even unpainted vertices.**
+A mesh can have more than four bone influences per vertex. The legacy `BoneWeight` API handles only four, so if it were used alone, **the whole mesh would be cut to four slots, including the vertices that were never painted.**
 
-So the session stores the original's variable weight data separately at `Load` time.
+So the session keeps the source's variable weight data aside when you `Load`.
 
-- Paint a weight and **only the weld groups you touched** convert to 4-slot.
-- The rest stay as the preserved original.
-- When saving, both are merged and written at once.
+- When you paint weights, only the **painted weld groups** are rewritten into four slots.
+- Everything else is kept from the stored source data.
+- When saving, the two are merged and written in one pass.
 
-Result: paint one arm's weights and the leg's 5-influence vertices stay intact.
+As a result, painting one arm leaves the five-influence vertices in the leg as they were.
 
-Undo snapshots, delete/separate, and final sync all go through this path. Unity 2019.4 has no variable weights, so it stays legacy 4-slot.
-
-:::caution[Separated parts are an exception]
-`Separate Selection (P)`'s `_Part.asset` is limited to 4-slot. → [Limitations](/limitations)
+Undo snapshots, delete and separate, and the final synchronization all go through this path.
+:::caution[Separated pieces are the exception]
+A `_Part` piece separated on `Select & Move` keeps the source's bone influence count and is not cut down to four slots. → [Limitations](/limitations)
 :::
 
-## Name Matching
+## Matching the name {#이름-맞추기}
 
-Unity warns if the main object's name inside an asset differs from the filename. `Bake` matches the mesh object's name to the filename right before saving.
+Unity warns when the main object inside an asset file has a different name from the file. Just before saving, `Save Mesh` renames the mesh object to match the file name.
 
-## On Failure
+## When saving fails
 
-If `Bake` fails, **the session stays open.**
+When `Save Mesh` fails, the **session stays open.** Fix the cause and try again.
 
-> `Bake failed ({0} succeeded / {1} failed): {2} — failed sessions were kept so you can retry.`
+If you saved several meshes together, only the ones that succeeded are written as assets. The failed sessions stay open so you can try again. The result appears in a per-target table. → [Using the window](/guides/window#저장-결과표)
 
-If multiple meshes were baked, only successful ones become assets. Failed sessions stay open so you can fix and retry. Results are arranged in a `Bake results ({0}/{1} succeeded)` table. → [Using the Window](/guides/window)
+## Color buffers
 
-## Color Buffer
-
-If a mesh's color channel is imported as 8-bit (UNorm8), float colors can't be used directly. Snapshots, cleanup, separate, and session sync all go through one read/write path and follow the original mesh's format.
+If a mesh's color channel is imported as 8-bit (UNorm8), float colors cannot be written to it directly. Snapshots, cleanup, separation, and session sync all go through the same read and write path, and they follow the format of the source mesh.

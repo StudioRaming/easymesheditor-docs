@@ -20,13 +20,12 @@ const GLOSSARY = {
   'Work Mesh': '/internals/session-and-undo#work-mesh',
   '웰드 그룹': '/internals/session-and-undo#웰드-그룹',
   '트랜잭션': '/internals/session-and-undo#트랜잭션',
-  '자동 저장': '/internals/session-and-undo#자동-저장과-복원',
+  '자동 보존': '/internals/session-and-undo#자동-보존과-복원',
   '고아 정점 정리': '/internals/bake#고아-정점-정리',
   'provenance': '/reference/output-files#provenance와-owner',
 
   // 창
   '단축키 시트': '/guides/window#단축키-시트',
-  '컴팩트 모드': '/guides/window#컴팩트-모드',
   '불러올 후보': '/guides/window#불러올-후보',
 
   // 스컬프트
@@ -47,7 +46,7 @@ const GLOSSARY = {
   '미러 키': '/guides/blendshape#미러-키',
   '확장 범위': '/guides/blendshape#확장-범위',
   '적용값 합치기': '/guides/blendshape#적용값-합치기',
-  '새 쉐이프로 저장': '/guides/blendshape#빠른-캡처와-bake',
+  '새 키로 저장': '/guides/blendshape#빠른-캡처와-bake',
 
   // 웨이트
   '자동 정규화': '/guides/weight-paint#자동-정규화와-최대-영향-본-수',

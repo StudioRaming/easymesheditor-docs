@@ -1,185 +1,193 @@
 ---
 id: edit
-title: Edit
+title: Select & Move
 sidebar_position: 3
 ---
 
-# Edit
+# Select & Move
 
-**After reading this document**, you'll know how to select vertices/edges/faces, the difference between gizmos and Blender-style modal transforms, how to select edge loops with Alt+click, and all Edit tab operations: hiding, pivot, normals, merge, and separate.
+**After reading this page** you will know how to select vertices, edges, and faces, how the gizmo differs from the Blender-style G/R/S transform, how to pick an edge loop with Alt+click, how to clean up painted regions, and how hide, pivot, normals, merge, and separate work on this tab.
 
-## Element Mode {#요소-모드}
+## Element mode {#요소-모드}
 
 | Button | Key |
 |---|---|
-| `Vertex (1)` | `1` |
-| `Edge (2)` | `2` |
-| `Face (3)` | `3` |
-
-Selection state displays as `Selection — {0} verts · {1} edges · {2} faces`.
+| Vertex | `1` |
+| Edge | `2` |
+| Face | `3` |
 
 ## Selection {#선택}
 
 | Operation | Result |
 |---|---|
-| Click | Replace selection |
-| `Shift`+click or `Ctrl`+click | Toggle |
-| Double-click or `L` | Select entire connected component under cursor (`Linked Select (L)`) |
-| `Shift+L` | Deselect connected component |
-| `B` or drag in empty space | Box select (`Shift`=add, `Ctrl`=remove) |
-| `A` / `Alt+A` | `Select All (A)` / `Deselect (Esc)` |
-| `Ctrl+I` | `Invert (Ctrl+I)` |
-
-Press `B` and the window tells you: `Ready for box select — drag in Scene view · Shift=add · Ctrl/Cmd=remove · Esc/B=cancel`. Box select also catches triangles that intersect the rectangle's edge.
+| Click | Replace the selection |
+| `Shift` or `Ctrl` + click | Add or remove (toggle) |
+| Double-click or `L` | Select the whole connected element under the cursor |
+| `Shift+L` | Deselect the connected element |
+| `B` or drag on empty space | Box select (`Shift` adds, `Ctrl` removes) |
+| `A` / `Alt+A` | Select all / clear the selection |
+| `Ctrl+I` | Invert the selection |
+| `Esc` | Clear the selection |
 
 :::note[UV seam vertices are selected together]
-Unity meshes are split into multiple vertices at the same position at UV boundaries. Selection grabs the whole group based on position, so when you click one point on screen, several vertices actually move together behind the scenes. → [Weld Groups](/internals/session-and-undo#웰드-그룹)
+A Unity mesh splits vertices at UV borders, so several vertices share one position. Selection takes the whole group at that position together. You click one point on screen, but two to four vertices move together. → [Weld group](/internals/session-and-undo#웰드-그룹)
 :::
 
-When X-Ray (`Alt+Z`) is off, occluded elements don't show or select. When on, it penetrates and selects through to the back.
+When X-Ray (`Alt+Z`) is off, hidden elements are neither shown nor selectable. When it is on, selection goes through to the back side.
 
-### Edge Loops and Edge Rings {#엣지-루프와-엣지-링}
+### Edge loops and edge rings {#엣지-루프와-엣지-링}
 
-- `Alt+click` (release without dragging) — edge loop
-- `Ctrl+Alt+click` — edge ring
-- Both add to selection with `Shift`
+- `Alt+click` (click without moving the pointer, then release): edge loop
+- `Ctrl+Alt+click`: edge ring
+- Hold `Shift` with either one to add to the current selection
 
-:::caution[`Alt+drag` still rotates the scene as usual]
-To preserve Unity's scene rotation, loop selection only happens on **click without dragging.** If you hold `Alt` and drag even a little, the camera rotates normally.
+:::caution[`Alt+drag` still rotates the Scene view]
+So that Unity's Scene view rotation is not taken away, the loop selection happens only on a click that moved less than 3 px. If you hold `Alt` and drag further than that, the camera rotates as usual.
 :::
 
-Loops and rings stop at poles and boundaries.
+### Growing and shrinking the selection
 
-### Expand and Shrink Selection
+- `Ctrl` + `+`: grow the selection
+- `Ctrl` + `-`: shrink the selection
 
-- `Ctrl` + `+` — `Expand Selection (Ctrl++)`
-- `Ctrl` + `-` — `Shrink Selection (Ctrl+-)`
-
-Numpad `+` `-` also work.
+The numpad `+` and `-` work the same way.
 
 ## Gizmo {#기즈모}
 
-| Button | Key |
+| Tool | Key |
 |---|---|
-| `View (Q)` | `Q` |
-| `Move (W)` | `W` |
-| `Rotate (E)` | `E` |
-| `Scale (R)` | `R` |
+| View | `Q` |
+| Move | `W` |
+| Rotate | `E` |
+| Scale | `R` |
 
-Same layout as Unity's default tools. Even on skinned meshes with bones, it safely applies inverse skin deformation, so you can drag the pose-locked mesh as it appears on screen.
+These match Unity's default tool layout. On a skinned mesh that has bones, the drag is applied with the pose you see, so you drag what you see on screen.
 
-If you select elements from multiple meshes, a single shared gizmo in world space transforms them together. → [Multiple Meshes](/guides/multi-mesh)
+If you selected elements in several meshes, one shared world-space gizmo moves them together. → [Multiple meshes](/guides/multi-mesh)
 
-## Modal Transform {#모달-변형}
+## Modal transform (G / R / S) {#모달-변형}
 
-Blender-style `G` / `R` / `S`. Press in the Scene view with a selection and the transform starts with the mouse alone.
+These are the Blender-style `G` (move), `R` (rotate), and `S` (scale). With a selection in place, press the key while the cursor is in the Scene view, and the transform starts with the mouse alone.
 
-| Key | Operation |
-|---|---|
-| `G` | `Move (G)` |
-| `R` | `Rotate (R)` |
-| `S` | `Scale (S)` |
+While the modal is active:
 
-During modal: `X/Y/Z=axis (twice=world) · Shift+axis=plane · number=exact value · Enter/LMB=confirm · Esc/RMB=cancel`
+- `X` / `Y` / `Z`: constrain to an axis. Press the same key again to switch from the local axis to the world axis.
+- `Shift` + axis: constrain to the plane that excludes that axis.
+- Number keys: type an exact value. Rotation is in degrees.
+- `Enter` or left click: confirm
+- `Esc` or right click: cancel
 
-- Press the same axis key again to switch from local to world axis (`Local` / `World` displayed).
-- `Shift+X` constrains to the plane excluding X (`Plane excluding {0}({1})`).
-- Type a number for exact values. Rotation is in degrees.
-- With multiple meshes, local axis isn't well-defined, so it falls back to `Multiple meshes → world axis`.
+One modal transform is one undo step. When several meshes are edited together, there is no single local axis, so the world axis is used.
 
 :::note[`R` does two things]
-`R` is a rotation modal only when **you have a selection and the cursor is over the Scene view.** Otherwise, it works normally as Unity's `R` = Scale gizmo.
+`R` opens the rotate modal only when something is selected and the cursor is over the Scene view. Otherwise `R` is Unity's scale gizmo.
 :::
 
-One modal transform is one undo step. Symmetry and proportional editing apply exactly like gizmo transforms.
+## Proportional editing {#프로포셔널-편집}
 
-## Proportional Editing {#프로포셔널-편집}
+Press `O` to turn on proportional editing. Unselected vertices around the selection follow smoothly within the radius.
 
-Turn on `Proportional Editing (O)` and unselected nearby vertices smoothly follow within `Radius`. Falloff is a smooth curve.
+- `Connected Only` on: the distance is measured along the topology. Other parts that overlap do not come along.
+- `Connected Only` off: the distance is measured in space.
 
-- `Connected only` **on** — Uses topology distance. Overlapping other parts won't be pulled along.
-- `Connected only` **off** — Uses spatial distance.
+Adjust the radius with `[` and `]`. The `Connected Only` setting is also in the Scene view overlay and under `Detailed settings` in Easy start.
 
-Adjust radius with `[` `]` (when proportional is off, the same keys adjust vertex display size).
-
-Vertices darkened by [Mask Mode](/guides/sculpt#마스크-모드) are excluded from proportional influence.
+Vertices masked in [mask mode](/guides/sculpt#마스크-모드) are left out of proportional influence.
 
 ## Symmetry
 
-Combine `Symmetry` X / Y / Z. Scene view toggles are `Shift+Alt+X` · `Shift+Alt+Y` · `Shift+Alt+Z`.
+Turn on X / Y / Z in `Symmetry`. The Scene view shortcuts are `Alt+Shift+X`, `Alt+Shift+Y`, and `Alt+Shift+Z`.
 
-Edit tab symmetry **does not expand selection.** It applies the transformation result of selected elements mirrored across the local axis. Central vertices on the mirror plane stay locked to the plane.
+Symmetry on this tab does **not add to the selection.** It applies the result of transforming the selected elements to the opposite side of the local axis. Center vertices on the mirror plane stay fixed on that plane.
 
 ## Pivot {#피벗}
 
-Choose the reference point for rotation and scale in `Pivot`. Applies to both gizmos and `G`/`R`/`S` modals.
+Choose the reference point for rotation and scale. It applies to both the gizmo and the `G` / `R` / `S` modal.
 
 | Mode | Reference |
 |---|---|
-| `Median Point` | Average position of selected elements |
-| `Individual Origins` | Each element uses its own position |
-| `Active Element` | The last selected element |
-| `Bounding Box Center` | Center of the box containing the selection |
+| Median point | The average position of the selected elements |
+| Individual origins | Each element uses its own position |
+| Active element | The element you selected last |
+| Bounding box center | The center of the box that encloses the selection |
 
-When handling multiple meshes, turn on `Per-mesh Uniform Pivot` and each mesh uses its own pivot.
+When several meshes are edited together, turn on `Per-mesh pivot` to give each mesh its own pivot.
 
 ## Hide {#숨기기}
 
 | Button | Key |
 |---|---|
-| `Hide (H)` | `H` |
-| `Hide Others (Shift+H)` | `Shift+H` |
-| `Show All (Alt+H)` | `Alt+H` |
+| Hide selected | `H` |
+| Hide unselected | `Shift+H` |
+| Show all | `Alt+H` |
 
-Hidden count displays as `Hidden {0} — Alt+H to show all`.
-
-:::note[Hiding is not an undo target]
-Hiding is a display state of the edit session, not mesh data. Like Blender, it's not a `Ctrl+Z` target, and automatically clears when structure changes (delete/separate/merge).
+:::note[Hiding is not an undo step]
+Hiding is a display state of the editing session, not mesh data. It is not part of `Ctrl+Z`. It clears automatically when the structure changes (delete, separate, or merge).
 :::
 
 ## Normals {#노멀}
 
 | Item | What it does |
 |---|---|
-| `Display Normals` | Draws normal directions in the Scene view. Adjust length with `Normal Length` |
-| `Flip Normals` | Reverses the winding of selected faces |
-| `Recalculate Normals` | Recalculates normals for selected vertices smoothly |
+| Show normals | Draws the normal directions in the Scene view. You can change the length |
+| Flip normals | Reverses the winding of the selected faces |
+| Recalculate normals | Recalculates the normals of the selected vertices |
 
-Results are reported as `Flipped {0} face(s)` · `Recalculated {0} vertex group(s)`.
-
-Flipping also reverses normals and tangent deltas in blend shapes, so the inside surface won't get misaligned even on meshes with expression keys.
+Flip also reverses the normal and tangent deltas of the blend shapes, so inside faces do not come out wrong on a mesh that has shape keys.
 
 ## Delete {#삭제}
 
-`Delete Selection (X · {0} faces)` — `X`, `Delete`, `Backspace` all work. Removes selected faces.
-
-After deletion, vertices used only by those faces remain in the vertex buffer. These orphan vertices are cleaned up when you `Bake`. → [Orphan Vertex Cleanup](/internals/bake#고아-정점-정리)
+`X` or `Delete` removes the selected faces. A vertex used only by those faces stays in the buffer until `Save Mesh`, when it is cleaned up once. → [Cleanup of unused vertices](/internals/bake#고아-정점-정리)
 
 ## Separate {#분리}
 
-| Button | Key | Result |
+| Operation | Key | Result |
 |---|---|---|
-| `Separate Selection (P)` | `P` | Detaches selected elements to a new object |
-| `Separate by Islands (Shift+P)` | `Shift+P` | Separates selection into connected components and detaches each |
+| Separate selection | `P` | Splits the selected elements off |
+| Separate islands | `Shift+P` | Splits the selection into separate connected pieces |
+| Separate by group | Groups G0 to G9 | Assign faces to groups, then split them all at once |
 
-A `<original>_Part.asset` is created next to the original along with the separated object. → [Output Files](/reference/output-files)
+When you separate by group, G0 stays in the source, and each of G1 to G9 becomes a separate piece.
 
-Preserved: vertices, normals, tangents, UV0~UV3, colors, submesh·material correspondence, bindpose, bone weights, blend shape frames.
+A separated piece appears in the scene as an **unsaved piece**, and `Save Mesh` writes it next to the source as `<name>_Part….asset`. If you press `Discard edits` before saving, the source is restored and the unsaved pieces are deleted.
 
-The entire separation is one undo step. If it fails midway, it rolls back to the original state with `Separate failed, reverted: {0}` and deletes any partially created `_Part.asset`.
+Preserved: vertices, normals, tangents, UV0 to UV3, colors, submesh and material mapping, bindposes, the number of bone influences per vertex with exact weight values (including more than four influences), and all blend shape frames.
 
-:::caution[Separated parts are limited to 4 bone influences]
-In Unity 2020.1+, if you separate a mesh with 5+ bone influences per vertex, the **detached part is limited to legacy 4-slot weights.** The original stays as is. → [Limitations](/limitations)
+The whole separation is one undo step. If it fails partway, the tool restores the original state and deletes the partial `_Part.asset`.
+
+:::caution[Bone influences of a separated piece]
+A separated `_Part` piece keeps the source's bone influence count and is not cut down to four slots. The source keeps its influences. → [Limitations](/limitations)
 :::
+
+Combinations that include `Ctrl` or `Cmd` (`Ctrl+P`, `Ctrl+R`, `Ctrl+X`, and so on) stay as Unity shortcuts and do not run a Select & Move action. The exceptions are `Ctrl+A`, `Ctrl+I`, and `Ctrl` + `+` / `-`.
 
 ## Merge by Distance {#거리로-병합}
 
-In the `Vertex Merge` section, `Merge by Distance` combines duplicate vertices within `Merge Distance` into one. Use it to clean up duplicates left after delete or separate.
+`Merge by Distance` combines duplicate vertices within the `Merge distance`. Use it to clean up duplicates left after a delete or a separation.
 
-Results are reported as one of: `Merged {0} vertices` · `No vertices to merge` · `Merge failed, mesh unchanged`.
-
-:::note[Different UVs won't merge]
-Even if positions match, if UV0 differs, the vertex skips merge candidates. This keeps UV seams alive and textures from breaking. For the same reason, vertices with blend shape deltas noticeably different relative to mesh size also don't merge.
+:::note[Vertices with different UVs are not merged]
+Even at the same position, vertices with different UVs are not merged. This keeps the UV seam intact so the texture does not break. For the same reason, vertices whose blend shape deltas differ noticeably are not merged either.
 :::
 
-Bone weights and blend shapes are preserved. The group's attributes use the vertex with the smallest index.
+Bone weights and blend shapes are kept.
+
+## Painted region tools {#칠한-영역-정리}
+
+Open **Painted region tools** under `Select & Move` to work on the selected targets. The panel lists the targets that will be affected.
+
+1. Paint the area you want to change or protect, or apply a strength to the existing vertex, edge, or face selection.
+2. Blue marks the area to change, and green marks the area to protect. In delete mode, orange faces are the ones that will actually be removed.
+3. Hold `Ctrl` to erase, and hold `Shift` to smooth the strength of the area. Press `Esc` to cancel the current stroke.
+
+You can do three things with a painted area.
+
+- **Delete painted faces**: removes the painted triangles and cleans up vertices that are no longer used.
+- **Hide the painted part with a Shrink key**: creates a new shape key that moves the area inside the garment or hair. The base vertices stay as they are, and the preview is at 100%.
+- **Partial reduction**: reduces the vertex count using the painted strength and the protect strength. You can then make a Shrink key on the same area of the reduced topology.
+
+Keep these points in mind.
+
+- A separate option protects vertices that existing expressions move. It is on by default. Face names and head bones do not protect or exclude a vertex.
+- UV seams, material boundaries, open borders, and large bone weight differences are preserved. The reduction can therefore fall short of the target, so check both the target and the actual vertex count.
+- Each remaining vertex keeps its original UV8, color, normal, tangent, bone influences, and every shape frame.
+- The painted region is session state. It does not overwrite the mesh's color channels. Keep the result with `Save Mesh`.

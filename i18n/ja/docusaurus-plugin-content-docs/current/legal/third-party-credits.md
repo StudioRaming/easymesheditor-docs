@@ -1,35 +1,38 @@
 ---
 id: third-party-credits
-title: 第三者表記
+title: サードパーティの表記
 sidebar_position: 92
 ---
 
-# 第三者表記
+# サードパーティの表記
 
-**このドキュメントを読むと**、このプロダクトに他のコードが含まれているか、アルゴリズムはどこから参照したか が理解できます。
+**このページを読むと** この製品に他所のコードが含まれているかどうか、そして参照したアルゴリズムの出典がわかります。
 
-## 含まれる第三者コード
+## 含まれているサードパーティのコード
 
 **ありません。**
 
-Easy Mesh Editor `0.1.1`パッケージには、外部ライブラリ、オープンソースコード、第三者アセットが含まれていません。配布されるのは以下の3つです。
+Easy Mesh Editor `1.0.0` パッケージには、外部ライブラリ、オープンソースのコード、サードパーティの告知ファイルは含まれていません。配布されるのは次のとおりです。
 
-- `Editor/EasyMeshEditor.Editor.dll` — Studio Ramingが作成したコード
-- `Editor/Shaders/EmeOverlay.shader` · `Editor/Shaders/EmeSceneGL.shader` — Studio Ramingが作成したシーンビュー表示シェーダー
+- `Editor/EasyMeshEditor.Editor.dll`: Studio Raming が作成したコード（難読化されたビルド）
+- `Editor/Shaders/EmeOverlay.shader` · `Editor/Shaders/EmeSceneGL.shader`: Studio Raming が作成した、シーンビューの表示用のシェーダー
+- エディターのアイコン画像（PNG ファイル）
 - `README.md`
 
-Unityエンジン APIはUnity Technologiesのものであり、このプロダクトには再配布されません。
+<!-- CONFIRM: the package file list is checked against the dry-run package (no third-party notice file, no license strings in the EME sources). Whether the obfuscated DLL contains third-party code is not verified (S1). -->
 
-## アルゴリズム参考
+Unity エンジンの API は Unity Technologies のものであり、この製品に再配布されません。
 
-`スカルプト`タブの`エラスティック（1）`ブラシは以下の論文の変形モデルを実装しています。コードを引用したのではなく、公開された式を参照して直接実装したため、ライセンス義務ではなく**出典表記**です。
+## アルゴリズムの参照
+
+`形を整える` タブの `引っぱる (1)` ブラシは、下の論文の変形モデルに基づいています。コードを取り込んだわけではなく、公開されている数式を参照して独自に実装しているため、ライセンス上の義務ではなく**出典の表記**です。
 
 > Fernando de Goes, Doug L. James. *Regularized Kelvinlets: Sculpting Brushes based on Fundamental Solutions of Elasticity.* ACM Transactions on Graphics (SIGGRAPH), 2017.
 
-ウィンドウの説明が述べている動作はここから来ています — `正規化Kelvinletとc2ソフトテールで境界が途切れなく広がります。`→ [スカルプト](/guides/sculpt#엘라스틱)
+ウィンドウの説明が示す動作は、ここから来ています。正規化 Kelvinlet と C2 のソフトテールにより、境界で途切れずに広がります。→ [形を整える](/guides/sculpt#엘라스틱)
 
-## このプロダクトのライセンス
+## この製品のライセンス
 
-含まれるDLL、シェーダー、アセットファイルの再配布・再販売・流出を禁止します。
+同梱の DLL、シェーダー、アセットファイルの再配布、再販売、流出は禁止されています。
 
-問い合わせ：`studioraming@gmail.com`
+お問い合わせ: `studioraming@gmail.com`

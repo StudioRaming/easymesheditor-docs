@@ -1,14 +1,14 @@
 ---
 id: limitations
-title: Current Limitations
+title: Current limitations
 sidebar_position: 91
 ---
 
-# Current Limitations
+# Current limitations
 
-Easy Mesh Editor `0.1.1` baseline. What's here is **not a bug but what we don't do yet** this version.
+This applies to Easy Mesh Editor `1.0.0`. What is listed here is not a bug. It is **work this version does not do yet**.
 
-## Unimplemented Features
+## Missing features
 
 | Feature | Status |
 |---|---|
@@ -16,65 +16,60 @@ Easy Mesh Editor `0.1.1` baseline. What's here is **not a bug but what we don't 
 | Inset | Not implemented |
 | Bevel | Not implemented |
 
-All three are topological operations that create new faces, so we set them aside for now. This version's `Edit` tab goes as far as selecting existing faces, moving them, deleting, separating, and merging. → [Edit](/guides/edit)
+All three create new faces, so they are separate work and are not in this version. The `Select & Move` tab in this version can select, move, delete, separate, and merge existing faces. Topology changes are limited to delete, separate, and Merge by Distance. → [Select & Move](/guides/edit)
 
-## Target Limits
+## Target limits
 
-- `BlendShape` and `Weight` tabs are **`SkinnedMeshRenderer` only.** Regular `MeshRenderer` works up to `Sculpt` · `Edit` · `Bake` only.
-- When handling multiple meshes, `BlendShape` requires **all** targets to be SMR.
-- Read/write-disabled meshes, non-triangle topology, corrupt mesh data are not guaranteed to edit correctly.
+- `Shape Keys` and `Bone Weights` tabs work **only with `SkinnedMeshRenderer`**. A plain `MeshRenderer` supports `Shape`, `Select & Move`, and `Save Mesh` only.
+- When several meshes are edited together, every target must be an SMR for `Shape Keys`.
+- Meshes that cannot be read or written, non-triangle topology, and damaged mesh data are not guaranteed to edit correctly.
 
-## Bone Weights
+## Bone weights
 
-- Direct painting operates within Unity's legacy **4-slot** range.
-- In Unity 2020.1+, 5+ bone influences on **unpainted** vertices are preserved. → [Variable Bone Weight](/internals/bake#가변-본-웨이트)
-- Unity 2019.4 lacks the variable bone weight API entirely. Only 4-slot handled.
-- Parts detached with `Separate Selection (P)` are **limited to 4-slot**, even if the original had 5+.
+- Direct painting works within Unity's legacy **four-slot** range.
+- Bone influences of **unpainted** vertices beyond five are kept. → [Variable bone weights](/internals/bake#가변-본-웨이트)
 
-## BlendShape
+## Shape keys
 
-- Keys with multiple frames edit **only the final frame (100%).** Intermediate frames update proportionally when saved. No per-frame sculpting.
-- If multiple keys share a name, the list item you clicked is the one edited.
-- During a transaction, operations that change vertex count (delete, separate) can't be saved as keys.
+- A key with several frames has **only its last frame (100%) edited**. When you save, the middle frames are updated in proportion to that change. There is no way to shape the middle frames one by one.
+- If several keys share a name, only the one you clicked in the list is edited.
+- During a shape key edit, you cannot save an operation that changes the vertex count (delete or separate) as a key.
 
-## Scene View Controls
+## Scene view behavior
 
-- `Alt+click` edge loop works only on **click without dragging.** We preserve Unity's `Alt+drag` scene rotation. → [Edit](/guides/edit#엣지-루프와-엣지-링)
-- Symmetry shortcuts are `Shift+Alt+X` / `Y` / `Z`. Solo `X` `Y` `Z` and `Alt+Z` are reserved for Unity tool handles and X-Ray, not intercepted.
-- Scene view shortcuts don't work during text input and don't modify Unity's global Shortcut profile.
-- `Weight` tab's `Symmetric Paint (X)` has `(X)` in the label but toggles **only via the window checkbox.**
+- `Alt+click` edge loop works only on a **click without movement**. This keeps Unity's `Alt+drag` Scene view rotation intact. → [Select & Move](/guides/edit#엣지-루프와-엣지-링)
+- The axis symmetry shortcuts are `Alt+Shift+X` / `Y` / `Z`. Plain `X` `Y` `Z` and `Alt+Z` stay as Unity's tool handles and X-Ray, so this tool does not capture them.
+- Scene view shortcuts do not work while you type in a text field, and they do not change Unity's global Shortcut profile.
+- The `Symmetric Paint (X)` option on `Bone Weights` has `(X)` in its label, but it is turned on and off **only with the checkbox** in the window.
 
-## Window and Docking
+## Window and automatic keeping
 
-- If window height is insufficient, [Compact Mode](/guides/window#컴팩트-모드) auto-engages, hiding subtitle and `How to use` guide blocks. Can't toggle.
-- Opening **2+ windows** and recompiling only restores one from autosave.
-- Autosave has no dirty check. `Load` alone triggers save/restore even if nothing changed.
-- Editor crashes are not autosave targets.
+- If you have two or more windows open and scripts recompile, automatic keeping restores only one of them.
+- Automatic keeping has no check for whether anything changed. Even if you only pressed `Load` and did nothing else, the session is kept and restored.
+- If the editor closes unexpectedly, automatic keeping does not run. Instead, a checkpoint is saved at least every 60 seconds while there are unsaved edits, and the next time the window opens, a recovery banner offers to restore it.
 
 ## Performance
 
-- High-density meshes increase Scene view overlay, precise box picking, skin pose calculation, and brush processing costs.
-- Multiple open meshes add those costs together. Pick only what you need. → [Multiple Meshes](/guides/multi-mesh)
-- Structural undo snapshots have a memory limit. Oldest are dropped when exceeded.
+- High-density meshes increase the cost of the Scene view overlay, exact box picking, skin pose calculation, and brush processing.
+- Opening several meshes together adds those costs. Load only what you need. → [Multiple meshes](/guides/multi-mesh)
+- The snapshots that support structural undo have a memory limit. When the limit is reached, the oldest snapshots are dropped.
 
-## Runtime Environment
+## Runtime environment
 
-- **Unity Editor only.** Not a player build feature.
-- Support range: **Unity 2019.4.31f1 ~ 2022.3.22f1.**
-- Putting DLL and source versions in the same project causes compile error.
+- **Unity Editor only.** It is not a runtime feature for player builds.
+- Supported versions: **Unity 2019.4, 2021.3, 2022.3, 6000.0, and 6000.3 (LTS)**.
+- Installing the DLL edition and the source edition in the same project causes compile errors.
 
 ## Recommendation
 
-Back up important projects with version control or separate backup. `Bake` won't overwrite the original, but the renderer's mesh reference changes.
+Keep version control or a separate backup for important projects. `Save Mesh` does not overwrite the source asset, but the mesh that the renderer points to does change.
 
-## Report Issues
+## Reporting
 
 `studioraming@gmail.com`
 
-Include:
-
 1. Unity version
 2. Render pipeline (BRP / URP)
-3. Easy Mesh Editor version (`0.1.1`)
-4. Full Console log
-5. Reproduction steps
+3. Easy Mesh Editor version (`1.0.0`)
+4. The full Console log
+5. Steps to reproduce

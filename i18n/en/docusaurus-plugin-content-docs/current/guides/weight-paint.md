@@ -1,175 +1,141 @@
 ---
 id: weight-paint
-title: Weight Paint
+title: Bone Weights
 sidebar_position: 5
 ---
 
-# Weight Paint
+# Bone Weights
 
-**After reading this document**, you'll know two ways to select which bone to paint, the 5 brush types and normalization rules, name-matching rules for left-right symmetric painting, bone merging, and how to import weights from another mesh.
+**After reading this page** you will know the two ways to choose the bone to paint, the five brushes and the normalization rules, the name rules for symmetric painting, how to merge a bone's weights, and how to transfer weights from another mesh.
 
-:::note[SkinnedMeshRenderer only]
-On regular meshes: `Weight Paint is for SkinnedMeshRenderer only.`
+:::note[`SkinnedMeshRenderer` only]
+This tab cannot be used with a plain mesh.
 :::
 
-## Select Bone {#본-고르기}
+## Choose a bone {#본-고르기}
 
-The `Bone List` section shows the bone hierarchy as a tree. The radio button on the left of each row is the **active bone** — the one you're painting now. Once chosen, it displays as `Active bone: {0}`.
+The bone list on the `Bone Weights` tab shows the bone hierarchy as a tree. The radio button on each row is the **active bone**, the bone you paint now. Click the bone name or its radio button to choose it. The root of the tree is `SkinnedMeshRenderer.rootBone` when it is set.
 
-If none chosen: `No active bone — click the radio button on the left of the list to select a bone to paint.` The Scene view hint says the same.
+If no bone is chosen, the tab tells you that you cannot paint yet.
 
 | Tool | What it does |
 |---|---|
-| `Search` | Filter by name |
-| `Expand` / `Collapse` | Expand or collapse the entire tree |
-| `Show Bones in Scene` | Draw bones in the Scene view |
-| `Show Only Bones With Weight` | Show only bones that actually have weight |
+| Search | Filters by name |
+| Expand / Collapse | Expands or collapses the whole tree |
+| Show bones in Scene | Draws the bones in the Scene view |
+| Only bones with weights | Keeps only the bones that actually have weights |
 
-You can also select in the Scene view:
+You can also choose bones in the Scene view.
 
-- `Ctrl` + bone click — set/unset active bone
-- `Ctrl+Shift` + bone click — toggle smooth target checkbox
+- `Ctrl` + click a bone: set or clear the active bone.
+- `Ctrl+Shift` + click a bone: turn the smoothing target check on or off.
 
-### Checked Bones
+### Checked bones {#체크된-본}
 
-Separate from the radio, each row has a checkbox. Checked bones are used to specify scope for `Smooth Selected Bones`, `Merge Bone Weights`, and `Import Weights`. Count displays as `{0} bones checked`.
+Each row also has a checkbox, separate from the radio button. Checked bones define the scope of `Smooth Checked Bones`, `Merge Bone Weights`, and `Transfer Weights`. The count appears as `Checked bones: {n}`.
 
-### Bone Lock {#본-잠금}
+### Lock {#본-잠금}
 
-Press `L` in a row to lock that bone's weight. Locked bones are excluded from painting, normalization, and transfer. Attempting to paint a locked bone shows: `Target bone is locked; skipping {0} vertices (unlock to paint).`
+Press the `L` button on a row to lock that bone's weights. Locked bones are left out of painting, normalizing, and transfers. If you try to paint a locked bone, the Scene view tells you why.
 
 ## Brushes {#브러시}
 
-| Button | Key | What it does |
+| Brush | Key | What it does |
 |---|---|---|
-| `Add (1)` | `1` | Raise active bone weight |
-| `Subtract (2)` | `2` | Lower it |
-| `Smooth (3)` | `3` | Even out with neighbors |
-| `Blur (4)` | `4` | Blend with neighbors |
-| `Average (5)` | `5` | Equalize the brush area |
+| Add | `1` | Raises the weight of the active bone |
+| Subtract | `2` | Lowers the weight of the active bone |
+| Smooth | `3` | Evens the weight with its surroundings |
+| Blur | `4` | Mixes the weight with its surroundings |
+| Average | `5` | Evens out the weight over the brush area |
 
-`Ctrl` reverses add/subtract. `Shift` temporarily smooths while held.
+`Ctrl` reverses Add and Subtract. `Shift` switches to Smooth only while held.
 
-Settings: `Radius` · `Strength` · `Falloff` (`Smooth` · `Sphere` · `Sharp` · `Constant`). Adjust radius with `[` `]`, strength with `,` `.`, modal with `F` / `Shift+F`.
+You can adjust the radius, the strength, and the falloff (`Smooth` · `Sphere` · `Sharp` · `Constant`). `[` and `]` change the radius, and `,` and `.` change the strength. `F` and `Shift+F` open mouse-driven modals.
 
-Painting instantly reflects the deformation in the current pose, so if you paint with the arm bent, you see the result right away.
+The deformation updates on every stroke in the current pose. If you paint with the arm bent, you see the result right away.
 
 ## Heatmap {#히트맵}
 
-Turn on `Show Weights` in the `Heatmap` section and weights appear as vertex colors. Adjust intensity with `Display Intensity`.
+Turn on the heatmap to see the weights as vertex colors. The colors run from blue through green to red as the value rises. If bones are checked, the heatmap shows the sum of the checked bones. Otherwise it shows the value of the active bone. You can adjust the display strength, and a legend appears with it.
 
-Colors go blue → green → red as values rise. If there are checked bones, it shows **their sum**; otherwise it shows the active bone's value.
+## Auto normalize and maximum bone influences {#자동-정규화와-최대-영향-본-수}
 
-## Auto Normalize and Max Bone Influences {#자동-정규화와-최대-영향-본-수}
+- **Auto Normalize**: when on, the weight sum of each vertex is set back to 1 after every stroke. It is on by default.
+- **Maximum bone influences**: limits how many bones one vertex can have.
 
-In the `Paint Options` section:
+With auto normalize off, the tool adds and subtracts without normalizing. The sum may then not be 1, so press `Normalize All` when you finish. Even if you turn it off and save anyway, the tool normalizes any vertex whose sum is not 1 just before `Save Mesh`, and tells you how many it fixed.
 
-- `Auto Normalize` (on by default) — after each paint stroke, resets the vertex's weight sum to 1.
-- `Max Bone Influences` — 1~4. Limits how many bones one vertex can have.
+`Normalize All` (`N`) normalizes the whole mesh at once. A vertex attached to no bone is attached to the **nearest bone**, not to the first bone in the list. If no nearby bone is found, it is attached to the root bone.
 
-Turn off `Auto Normalize` for pure add/subtract, and the window warns: `Auto Normalize is off. Weight sum may not equal 1; after finishing, press 'Normalize All' below.`
+If a vertex already has four influences and a weak value comes in, that value is skipped. The Scene view shows the reason.
 
-Even if you save with it off, there's a last defense line. Right before `Bake`, any vertex with sum ≠ 1 is normalized and reported: `Auto Normalize was off; normalized {0} vertices with sum ≠ 1 before saving.`
+## Symmetric painting {#대칭-페인트}
 
-`Normalize All (N)` normalizes the entire mesh at once. Vertices not attached to any bone are handled here.
+With `Symmetric Paint` on, painting also paints the **matching left and right bone** on the opposite vertices. The name of the matching bone is shown.
 
-| Message | Means |
+The name rules are as follows.
+
+| Form | Example |
 |---|---|
-| `Bound {0} unassigned vertices to closest bone.` | Attached to the nearest bone |
-| `Bound {0} unassigned vertices to root bone.` | Couldn't find nearest, used root |
-| `No bone info; left {0} unassigned vertices.` | No bones to attach to |
-
-If slots are full: `Skipping {0} vertices with 4 full slots (weak influence cut).`
-
-## Symmetric Paint {#대칭-페인트}
-
-Turn on `Symmetric Paint (X)` and when you paint, the **corresponding bone on the opposite side** is painted too. The matching bone displays as `Symmetric bone: {0}`.
-
-Name-matching rules, checked in order: suffix/prefix single-char first, then word form.
-
-| Form | Examples |
-|---|---|
-| Suffix | `Arm_L` ↔ `Arm_R` · `Arm.L` ↔ `Arm.R` · `Arm-L` ↔ `Arm-R` (lowercase `_l`/`_r` etc. too) |
-| Prefix | `L_Arm` ↔ `R_Arm` · `L.Arm` ↔ `R.Arm` · `L-Arm` ↔ `R-Arm` |
-| Word | `Left Arm` ↔ `Right Arm` · `left`/`right` · `LEFT`/`RIGHT` |
+| Suffix | `Arm_L` ↔ `Arm_R`, `Arm.L` ↔ `Arm.R`, `Arm-L` ↔ `Arm-R` (lowercase `_l` and `_r` work the same way) |
+| Prefix | `L_Arm` ↔ `R_Arm`, `L.Arm` ↔ `R.Arm`, `L-Arm` ↔ `R-Arm` |
+| Word | `Left Arm` ↔ `Right Arm`, `left` ↔ `right`, `LEFT` ↔ `RIGHT` |
 | Japanese | `左腕` ↔ `右腕` |
 
-Only matches if the derived name actually exists as a bone. Center bones like `Hips` or `Spine` have no pair, so they fall back to themselves. The window tells you: `No symmetric bone — treating as center bone, painting both sides with this one.`
+A pair counts only when the bone generated from the name actually exists. Center bones such as `Hips` or `Spine` have no partner, so they are painted as themselves, and the tool tells you so.
 
-:::caution[The `(X)` in the label is not a key hint]
-In the current version, this option is **toggled only by the window checkbox.** Pressing `X` in the Scene view doesn't toggle it.
+:::caution[The `(X)` in the label is not a key]
+The `Symmetric Paint` label includes `(X)`, but this option is turned on and off only with the checkbox in the window. Pressing `X` in the Scene view does not toggle it.
 :::
 
-## Smooth Selected Bones {#선택-본-스무딩}
+## Smooth checked bones {#선택-본-스무딩}
 
-Batch smoothing after checking multiple bones.
+Check several bones, then run a batch smoothing.
 
-- `Iterations` — 1~20
+- `Iterations`: 1 to 20
 - `Strength`
-- `Apply Smoothing (K)` — Scene view shortcut is `K`
+- `Apply Smooth` (Scene view shortcut `K`)
 
-While dragging the slider, it recalculates and shows live from a base snapshot. When you release, it commits as one undo step.
+While you move the slider, the result is recalculated in real time from the reference snapshot. When you release the slider, it is confirmed as one undo step. If no bone is checked, `K` does nothing.
 
-If no bones are checked, `K` does nothing.
+## Merge bone weights {#본-웨이트-합치기}
 
-## Merge Bone Weights {#본-웨이트-합치기}
-
-The `Merge Bone Weights` section. The window explains: `Move all weight from bone A to bone B. After moving, A's weight becomes 0, so you can safely delete that bone.`
+Move all weights of bone A to bone B. After the move, A has zero weight, so you can safely delete that bone.
 
 | Button | What it does |
 |---|---|
-| `Merge Active into Parent ({0})` | Merge active bone to its parent |
-| `Merge {0} Checked Bones into Active` | Merge checked bones to active |
-| `M` (row button) | Designate that bone as target |
+| Merge active bone into parent | Moves the active bone's weights to its parent |
+| Merge checked bones into active bone | Moves the checked bones' weights to the active bone |
 
-Choose the target from `Parent: {0}` / `Another bone`. If no candidates: `No target bone to merge into.`
+The target is either the parent bone or another bone. If the source and the target are the same, or the bone is locked, the merge does not happen.
 
-Result: `Merged weights from {0} bones into '{1}' ({2} vertices changed).`
+Use this to clean up stray bones that a garment does not need. → [Clothing fit](/workflow/clothing-fit)
 
-| Blocking case | Message |
+## Transfer weights from another mesh {#다른-메쉬에서-웨이트-가져오기}
+
+If you set a mesh that already has weights as the source, such as an avatar body, the tool copies the weights of the nearest surface point onto the current mesh. This is the basic step of clothing fit.
+
+1. Put a `SkinnedMeshRenderer` that already has weights into `Source mesh`.
+2. Set `Max distance`.
+3. Choose `Apply to`.
+4. Press `Transfer Weights`.
+
+| `Apply to` | Target |
 |---|---|
-| Source and target are the same | `Source and target bone are the same. Choose another.` |
-| Bone is locked | `Bone '{0}' is locked; cannot merge. Unlock it first.` |
+| Whole mesh | All vertices |
+| Weights of checked bones only | Only the influence of the checked bones |
+| Vertices without weights only | Only vertices not attached to any bone yet |
 
-Use this to clean up unused stub bones in clothing. → [Clothing Fit](/workflow/clothing-fit)
+The result reports how many vertices were applied, how many were out of range, and how many were skipped. The tool does not transfer when the source mesh has Read/Write turned off or has no weights.
 
-## Import Weights From Another Mesh {#다른-메쉬에서-웨이트-가져오기}
+### When the spaces do not match {#전송-공간}
 
-The `Import Weights from Another Mesh` section. The window explains: `Specify a SkinnedMeshRenderer with weight already set (like an avatar body), and the closest-point weight on that surface is transferred to the current mesh. Basic clothing fitting procedure.`
+Weights are bind pose data, so the two meshes must be in the same space for the matching points to line up. If the transforms of the source and target renderers differ, the window warns you. If the result is off, turn on `Ignore source transform (match in bind pose local space)` and run it again. This option matches in bind pose local space instead of world transforms.
 
-1. Put an already-weighted `SkinnedMeshRenderer` in `Source Mesh`.
-2. Set `Max Distance`.
-3. Choose `Scope`.
-4. Press `Import Weights`.
+## How weights are stored
 
-| `Scope` | Targets |
-|---|---|
-| `Entire Mesh` | All vertices |
-| `Only Checked Bones' Weights` | Only influence from bones checked in the list |
-| `Unweighted Vertices Only` | Only vertices not yet bound to any bone |
+A painted value is written to every vertex in the same [weld group](/internals/session-and-undo#웰드-그룹), and the sum is normalized to 1.
 
-Result: `Imported weights — applied {0} vertices · out of range {1} · skipped {2}.`
+Direct painting works within Unity's legacy four-slot range. The bone influences of **unpainted** vertices beyond five are kept as they are. → [Variable bone weights](/internals/bake#가변-본-웨이트)
 
-| Situation | Message |
-|---|---|
-| No source chosen or specifying self | `Specify a different SkinnedMeshRenderer, not the currently editing mesh.` |
-| Read/Write off | `Cannot read source mesh. Enable Read/Write Enabled in the model importer.` |
-| Source has no weights | `Source mesh has no bone weights.` |
-| Scope is checked but no checks | `No bones checked. Check the bones you want to import from the list.` |
-| Source bones with no match | `{0} source bones found no match, their influence (sum {2}) dropped: {1}` |
-
-### When Space Doesn't Align {#전송-공간}
-
-Weights are bind-pose data, so both meshes need to be in the same space for matching to work. If the source and target renderers have different transforms, the window warns:
-
-> `Source and target renderers have different transforms. Weights are bind-pose data, so both meshes must be in the same space to match — if results are off, enable the option below.`
-
-Below that, turn on `Ignore Source Transform (match in bind-pose local space)` to match in local bind-pose space instead of world transform.
-
-## How Weights Are Saved
-
-Painted values are recorded identically across the entire [weld group](/internals/session-and-undo#웰드-그룹) at the same position, and the sum is normalized to 1.
-
-Direct painting operates within Unity's legacy 4-slot range. In Unity 2020.1+, 5+ bone influences on **unpainted** vertices are preserved as-is. → [Variable Bone Weight](/internals/bake#가변-본-웨이트)
-
-If influence bones exceed slot count: `Influence bones exceed slots; {0} vertices had weak influences cut.`
+If the bone influences exceed the slot count, the weakest ones are cut, and the tool tells you how many vertices were affected.

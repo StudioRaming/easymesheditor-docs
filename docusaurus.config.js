@@ -20,7 +20,7 @@ import autoLinkTerms from './src/remark/auto-link-terms.mjs';
 // The product's own source of truth is
 // Assets/StudioRaming/EasyMeshEditor/Editor/Core/EasyMeshVersion.cs — keep the
 // two in step.
-const EME_VERSION = '0.1.1';
+const EME_VERSION = '1.0.0';
 const LATEST_CHANGELOG = `/changelog/${EME_VERSION}`;
 
 /** @type {import('@docusaurus/types').Config} */

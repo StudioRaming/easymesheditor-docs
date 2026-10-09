@@ -1,101 +1,97 @@
 ---
 id: clothing-fit
-title: Clothing Fit
+title: Clothing fit
 sidebar_position: 1
 ---
 
-# Clothing Fit
+# Clothing fit
 
-**After reading this document**, you can follow the entire process of fitting clothing made for a different avatar to your current avatar — from weight transfer through `Bake` — in one go.
+**After reading this page** you will be able to follow the full sequence for putting clothing made for another avatar onto your avatar, from transferring weights to `Save Mesh`.
 
-Assumption: you've attached the clothing object to the avatar, and the avatar bones are already rigged. The clothing pierces the body, doesn't follow the pose, and has no expression keys yet.
+Assumptions: the clothing object is attached to the avatar, and the avatar's bones are already in place. The clothing cuts into the body, does not follow the pose, or has no shape keys.
 
-## Steps
+## Sequence
 
 1. [Transfer weights](#1-웨이트-전송)
-2. [Refine with symmetric paint](#2-대칭-페인트로-보정)
+2. [Correct with symmetric painting](#2-대칭-페인트로-보정)
 3. [Merge unused bones](#3-안-쓰는-본-합치기)
-4. [Import expression keys](#4-표정-키-가져오기)
-5. [Refine shape](#5-형태-다듬기)
-6. [Bake](#6-bake)
+4. [Import shape keys](#4-표정-키-가져오기)
+5. [Shape](#5-모양-다듬기)
+6. [Save Mesh](#6-메쉬-저장)
 
-## 1. Transfer Weights {#1-웨이트-전송}
+## 1. Transfer weights {#1-웨이트-전송}
 
-Select the clothing object and `Load` → `Weight` tab.
+Select the clothing object, press `Load`, and go to the `Bone Weights` tab.
 
-In `Import Weights from Another Mesh`:
+Under `Transfer weights from another mesh`, set:
 
-- `Source Mesh` = avatar body's `SkinnedMeshRenderer`
-- `Scope` = `Entire Mesh`
-- `Max Distance` = start at default; if many `out of range` vertices are reported, raise it gradually
+- `Source mesh`: the avatar body's `SkinnedMeshRenderer`
+- `Apply to`: `Whole mesh`
+- `Max distance`: start from the default, and raise it a little at a time if many vertices are reported as out of range
 
-Press `Import Weights` and check the result.
+Press `Transfer Weights` and read the result. It reports how many vertices were applied, how many are out of range, and how many were skipped.
 
-> `Imported weights — applied {0} vertices · out of range {1} · skipped {2}.`
+Rather than raising the distance until nothing is out of range, it is better to paint the few remaining vertices by hand in the next step. A distance that is too large pulls in the wrong bones.
 
-Rather than raising distance until `out of range` is 0, leaving a few remaining and hand-painting them in the next step usually gives better results. Raising distance too much pulls in unintended bones.
-
-:::caution[If results are completely off, it's a space issue]
-If source and target renderer transforms differ, the window warns. Then enable `Ignore Source Transform (match in bind-pose local space)` and try again. → [Weight Paint](/guides/weight-paint#전송-공간)
+:::caution[If the whole result is off, the cause is the space]
+If the transforms of the source and target renderers differ, the window shows a warning. In that case turn on `Ignore source transform (match in bind pose local space)` and run the transfer again. → [Bone Weights](/guides/weight-paint#전송-공간)
 :::
 
-If source bones can't be matched by name, you see a list: `{0} source bones found no match, their influence (sum {2}) dropped: {1}`. If those bones are actually needed, it's faster to go back and fix the bone rigging names to match.
+If the source mesh has bones whose names do not match, their influence is discarded, and the window lists them. If you need those bones, it is faster to rename the avatar's bones to match and try again.
 
-## 2. Refine with Symmetric Paint {#2-대칭-페인트로-보정}
+## 2. Correct with symmetric painting {#2-대칭-페인트로-보정}
 
-Transfer uses surface-proximity matching, so parts far from the body like sleeve cuffs, collars, and skirt hems end up awkward.
+Transfer uses surface proximity, so parts that stand away from the body, such as sleeve ends, collars, and skirt hems, come out looking odd.
 
-1. Turn on `Show Weights` and use the heatmap to see what's off.
-2. Turn on `Symmetric Paint`. Check that `Symmetric bone: {0}` is correct.
-3. Pose with arm or leg bent and paint with `Add (1)` · `Subtract (2)` · `Smooth (3)`.
-4. For smooth areas, `Blur (4)` and `Average (5)` are fast.
+1. Turn on the heatmap and see where the problem is.
+2. Turn on `Symmetric Paint`. Check that the matching bones are found.
+3. Hold the arm or leg bent, and paint with `Add` (1), `Subtract` (2), and `Smooth` (3).
+4. To even out a wide area, `Blur` (4) and `Average` (5) are faster.
 
-If you see `No symmetric bone — treating as center bone, painting both sides with this one,` that bone is treated as central. If it's a left/right bone and you see this, your rig's naming convention differs from supported patterns. → [Name matching rules](/guides/weight-paint#대칭-페인트)
+If a bone is treated as a center bone, but it should be a left or right bone, the rig's naming does not match the supported forms. → [Name rules](/guides/weight-paint#대칭-페인트)
 
-Check multiple bones and use `Smooth Selected Bones` at once to clean up edges around joints in one pass.
+Check several bones and run `Smooth Checked Bones` to smooth them in one pass. The boundaries around joints are cleaned up together.
 
-## 3. Merge Unused Bones {#3-안-쓰는-본-합치기}
+## 3. Merge unused bones {#3-안-쓰는-본-합치기}
 
-If the clothing has stub bones from its original avatar, move their weights before deleting them.
+If the garment still has stray bones from the original avatar, move their weights to a parent before you delete them.
 
-Use `Merge Bone Weights` with `Merge Active into Parent ({0})`. After moving, that bone's weight becomes 0 and it can be safely deleted from the hierarchy.
+Use `Merge active bone into parent` under `Merge Bone Weights`. After the move, the bone's weight is zero, and you can safely remove it from the hierarchy.
 
-To clean up multiple bones at once, make the target bone active, check the bones to remove, then press `Merge {0} checked bones into active`.
+To clean up several bones at once, make the target bone active, check the bones to remove, and press `Merge checked bones into active bone`.
 
-## 4. Import Expression Keys {#4-표정-키-가져오기}
+## 4. Import shape keys {#4-표정-키-가져오기}
 
-If the clothing has parts covering the face like hoods or masks, you need expression keys.
+If the garment has a part that covers the face, such as a hood or a mask, it needs shape keys.
 
-`BlendShape` tab → `Import Keys from Another Mesh`.
+On the `Shape Keys` tab, use `Import keys from another mesh`.
 
-- `Source Mesh` = avatar face mesh
-- Check only the keys you need (`Select All` is usually overkill)
-- Set `Max Distance` and `Import`
+- `Source mesh`: the avatar's face mesh
+- Check only the keys you need. `Select all` is usually too much.
+- Set `Max distance`, then press `Import`.
 
-Vertices with no match stay as-is and don't move — `{1} vertices found no match — try increasing max distance.`
+Vertices with no matching point stay where they are. If a key with the same name already exists, the tool asks whether to replace it. Lock the keys you want to keep, with `L`, before you import. Locked keys are skipped.
 
-If a key with the same name already exists, you're asked to replace. Lock keys you want to keep first with `L`. Locked keys are skipped in transfer.
+## 5. Shape {#5-모양-다듬기}
 
-## 5. Refine Shape {#5-형태-다듬기}
+At this point the movement matches. What remains is the places where the clothing cuts into the body.
 
-By now, movement is correct. What's left is where the clothing pierces the body.
+On the `Shape` tab:
 
-In the `Sculpt` tab:
+- Use `Pull` (1) to push the part that cuts through back inside.
+- Turn on `Symmetry`, and check the axis with `Show symmetry plane`.
+- Protect the parts you must not change: press `M` for mask mode, then use `Island` to click them.
 
-- Use `Elastic (1)` to push piercing parts inward.
-- Turn on symmetry and use `Show Symmetry Plane` to verify the axis.
-- Lock areas that shouldn't move using `Mask Mode (M)` with `Island` — click to lock.
+You can also remove the body inside the clothing. On the `Select & Move` tab, select faces that the garment fully covers, then delete them. The polygon count goes down as well. Vertices left unused by the deletion are cleaned up automatically during `Save Mesh`.
 
-You can also remove body by cutting. In the `Edit` tab, select faces completely hidden by clothing and press `Delete Selection (X · {0} faces)` to remove them and reduce polygons. Orphan vertices left after deletion are automatically cleaned up at `Bake`.
+Turn on X-Ray (`Alt+Z`) to see and select the body surface inside the clothing.
 
-Turn on `Alt+Z` X-Ray to see and select through the clothing to the body surface underneath.
+## 6. Save Mesh {#6-메쉬-저장}
 
-## 6. Bake {#6-bake}
+If you loaded the clothing and the body together, one `Save Mesh` creates an `_Edit.asset` for each. Check the result table to confirm that every target succeeded.
 
-If you loaded the clothing and body together, one `Bake` creates each `_Edit.asset`. Check the result table — all should be `OK`.
+If the badge shows `In transaction` before `Save Mesh`, confirm or cancel the shape key edit first.
 
-Before `Bake`, if the badge says `IN TRANSACTION`, first commit or cancel blend shape edits.
+## Coming back to edit later
 
-## When You Need to Revisit
-
-Reload the renderer using the `_Edit.asset` and continue working. If output comes from the same source, `Bake` **updates the same file while keeping its GUID**, so prefab and animation references don't break. → [Output Files](/reference/output-files)
+Load a renderer that already uses an `_Edit.asset` and continue working. If the output came from the same source, `Save Mesh` updates **the same file and keeps its GUID**, so references from prefabs and animations do not break. → [Generated files](/reference/output-files)

@@ -1,99 +1,98 @@
 ---
 id: expression-keys
-title: Making Expression Keys
+title: Making shape keys
 sidebar_position: 2
 ---
 
-# Making Expression Keys
+# Making shape keys
 
-**After reading this document**, you can create new expression keys through symmetric mirroring, manage the list with groups and locks, and follow the steps to verify they're made correctly.
+**After reading this page** you will be able to sculpt a new shape key, extend it left and right with a mirror key, organize the list with groups and locks, and check that the key was made correctly.
 
-Assumption: you've `Load`ed a `SkinnedMeshRenderer` and are on the `BlendShape` tab.
+Assumptions: a `SkinnedMeshRenderer` is loaded, and you are on the `Shape Keys` tab.
 
-## Steps
+## Sequence
 
-1. [Set base state](#1-기준-상태-만들기)
-2. [Sculpt one side only](#2-한쪽만-조형)
-3. [Make the other side with Mirror Key](#3-미러-키로-반대쪽-만들기)
+1. [Set the base state](#1-기준-상태-만들기)
+2. [Sculpt one side](#2-한쪽만-조형)
+3. [Make the other side with a mirror key](#3-미러-키로-반대쪽-만들기)
 4. [Organize with groups and locks](#4-그룹과-잠금으로-정리)
-5. [Verify](#5-확인)
+5. [Check](#5-확인)
 6. [Save](#6-저장)
 
-## 1. Set Base State {#1-기준-상태-만들기}
+## 1. Set the base state {#1-기준-상태-만들기}
 
-New keys start from **the absolute shape now visible on screen.** If other keys are on, you sculpt on top of that shape.
+A new key starts from the **absolute shape you see on screen now**. If other keys are on, you sculpt on top of that shape.
 
-Press `Reset All to 0` to zero out all keys before starting. Only intentionally turn some on if you're making a key on top of a specific expression.
+Press `Set all values to 0` to bring every key down to 0 before you start. Leave keys on only when you want to build a key on top of a specific expression.
 
-## 2. Sculpt One Side Only {#2-한쪽만-조형}
+## 2. Sculpt one side {#2-한쪽만-조형}
 
-`+ New Shape (N)` or press `N` in the Scene view.
+Press the new-key button, or press `N` in the Scene view.
 
-When you see the `Sculpting new shape: {0}` banner, start sculpting.
+When a bar shows that a key is being sculpted, the sculpting has started.
 
-- Drag = grab, `Shift` = smooth
-- `F` = radius, `Shift+F` = strength
+- Drag: grab
+- `Shift`: Smooth
+- `F`: radius, `Shift+F`: strength
 
-Put a left/right-marked name in the `Name` field. The mirror step next will flip this name.
+Enter a name in the `Shape key name` field that shows left and right clearly. The mirror step in the next section flips this name.
 
-| Name Example | Mirror Result |
+| Example name | Mirror result |
 |---|---|
 | `eye_close_L` | `eye_close_R` |
 | `L_brow_up` | `R_brow_up` |
 | `smileLeft` | `smileRight` |
 | `cheek_puff` | `cheek_puff_Mirror` |
 
-Press `Enter` for `Commit New Shape (Enter)`, or `Esc` if you don't like it.
+Press `Enter` to confirm the new key, or `Esc` to cancel if you are not happy with it.
 
-:::note[Committing here doesn't write the asset yet]
-Committing here **commits to the session only.** The mesh asset gets it at `Bake`. → [BlendShape](/guides/blendshape#기존-키-편집)
+:::note[Confirming does not change the asset yet]
+Confirming here is a **session** confirmation. The mesh asset is updated only when you press `Save Mesh`. → [Shape Keys](/guides/blendshape#기존-키-편집)
 :::
 
-If you don't like the sculpt, you can touch it up. Press the edit button for that key in the list to load its 100% shape and continue sculpting. You can switch to `Sculpt` or `Edit` tabs to work (`multi-tab edit`), then return and press `Commit Changes to '{0}' (Enter)`. However, **operations that change vertex count (delete, separate) cannot be saved.**
+If you are not happy with the sculpt, you can edit it again. Press the edit button on the key's row to load its 100% shape, and continue sculpting. You can also move to `Shape` or `Select & Move` while you work (multi-tab editing), then come back and finish with `Save`. You cannot save an edit that changes the vertex count (delete or separate).
 
-## 3. Mirror Key for the Other Side {#3-미러-키로-반대쪽-만들기}
+## 3. Make the other side with a mirror key {#3-미러-키로-반대쪽-만들기}
 
-Press `M` in the row of the key you just made. `Mirror Axis` is usually X.
+Press `M` on the row of the key you just made. The mirror axis is usually X.
 
-> `Created mirrored key '{0}' across {1} axis.`
+The left and right topology does not have to match exactly. The tool finds pairs by spatial matching. A vertex with no partner is mirrored only if it lies on the symmetry plane.
 
-Left-right topology doesn't need to be perfect. It finds pairs by spatial position, and only vertices on the symmetry plane are reflected if they have no pair.
+If the mirror key is not created, the tool could not find a symmetric partner. If the mesh is asymmetric from the start, you must sculpt the opposite side by hand.
 
-If it doesn't create, symmetry pairing failed — `Could not create mirrored key for '{0}'.` If the mesh is inherently asymmetric, sculpt the other side by hand.
+## 4. Organize with groups and locks {#4-그룹과-잠금으로-정리}
 
-## 4. Organize with Groups and Locks {#4-그룹과-잠금으로-정리}
+When you have more than about twenty keys, the list gets long.
 
-Once you have 20+ keys, the list gets long.
+- Turn on `Group` to fold the list by name prefix. If you decide on prefixes such as `eye_`, `mouth_`, or `brow_`, the list is easier to manage.
+- Lock a finished key with `L` on its row. Locked keys are left out of bulk value changes, deletion, and key import from another mesh.
 
-- Turn on `Group` to collapse by name prefix. Stick to prefixes like `eye_`, `mouth_`, `brow_` and management becomes easy.
-- Lock completed keys with `L` in the row. Locked keys are excluded from batch value changes, deletion, and transfer to other meshes.
+You can also select several keys with `Ctrl` or `Shift` + click, and lock them all at once.
 
-Select multiple keys with `Ctrl`/`Shift` click and lock them all at once with `Lock` — `Locked {0} keys.`
+To reorder, select the keys and press `^` / `v`. Moving several keys is also one undo step.
 
-To reorder, select and use `^` / `v`. Moving multiple keys is one undo step.
+## 5. Check {#5-확인}
 
-## 5. Verify {#5-확인}
+Check that the key moves only where you intended.
 
-Check that your keys move only where intended.
-
-1. Press `S` in the row for [Solo Preview](/guides/blendshape#솔로-프리뷰). That key alone shows at 100.
-2. Turn on `Heatmap` and click that key. Vertices with actual delta show colored — `Heatmap: '{0}' · max movement {1}`
-3. If unintended areas lit up, your brush radius was too wide during sculpting. Go back to edit and refine.
+1. Press `S` on the row to turn on the [solo preview](/guides/blendshape#솔로-프리뷰). Only that key is shown at 100.
+2. Turn on `Heatmap` and click the key. The vertices that actually move are shown in color.
+3. If a wrong area is colored, the brush radius was probably too wide when you sculpted. Go back to editing and refine it.
 4. Press `Esc` to clear solo.
 
-Turn on `Expand Range` to push to `-100~200`. Use this to see if the shape breaks when exaggerated; don't save those values as-is.
+Turn on `Extended range` to push the slider to `-100` to `200`. Use it to check that the shape does not collapse when exaggerated. Do not save at those extreme values.
 
 ## 6. Save {#6-저장}
 
-Two paths:
+There are two choices.
 
-- **`Bake`** — bake the entire mesh with key structure to `<original>_Edit.asset` and end the session.
-- **`Save as New Key`** — keep the base and save only the changes added this time as a new key, continue session.
+- **`Save Mesh`**: bakes the whole mesh, including the key structure, to `<source name>_Edit.asset`, and ends the session.
+- **`Save as New Key`**: stores only the change you added to the base shape as a new key, and continues the session.
 
-Key-making usually uses `Bake`. `Save as New Key` is for "I sculpted to change the shape, want to keep the base as-is, and save only this change as a key." → [Quick capture vs Bake](/guides/blendshape#빠른-캡처와-bake)
+When you are making keys, `Save Mesh` is usually the one to press. `Save as New Key` is for when you changed the shape with `Shape`, want to keep the base mesh as it is, and want to keep only this change as a key. → [Quick capture and Save Mesh](/guides/blendshape#빠른-캡처와-bake)
 
-## Recover an Original Expression
+## Restoring an existing expression
 
-After changing the base, you sometimes need the original face back. The `Revert` button in that key's row creates a reversed key (`_Revert`).
+After you change the base shape, you may need the original face again. The `Reverse` button on that key's row creates a reversed key (`_Revert`).
 
-To lock in the current look of multiple keys turned on, use `Merge Applied Values`. The result of keys now non-zero becomes a new 100% key, and the keys used get their values reset to 0.
+To lock the current look into one key, use `Merge applied values`. The results of all keys that are not 0 become one new key at 100, and the source keys return to 0.

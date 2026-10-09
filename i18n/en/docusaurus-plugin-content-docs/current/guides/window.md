@@ -1,108 +1,118 @@
 ---
 id: window
-title: Using the Window
+title: Using the window
 sidebar_position: 1
 ---
 
-# Using the Window
+# Using the window
 
-**After reading this document**, you'll understand what each line in the window does, what status badges mean, why the display changes when docked narrow, and how to check shortcuts with the `Keys` sheet right there.
+**After reading this page** you will know what each part of the window does, what the status badges mean, how to use the candidate list before loading, how to open the hint bar and the shortcut sheet in the Scene view, and how to read the save result table.
 
-The window goes from top to bottom: **header → tabs → target line → save line → tab content → status bar.** No matter which tab you're in, this structure stays the same.
 
-## Header
+From top to bottom the window has the **header, tabs, target row, save row, and tab body**. The frame stays the same on every tab.
 
-On the left: product name and subtitle `In-scene mesh editing — StudioRaming`. On the right: version badge and language popup.
+## Header and language
 
-The version badge shows the installed product version as-is. Please use this number when reporting. The language popup has three: Korean / English / 日本語, and when you switch, the Scene view overlay and hint bar instantly redraw in the new language.
+The header shows the product name and the version badge. When you report a problem, include this version number.
+
+Choose the language from English / 한국어 / 日本語. When you change it, the window, the Scene view hints, and the tooltips are redrawn in the new language. When you first open the window, it follows the system language of the Unity Editor.
 
 ## Tabs
 
-Four of them: `Sculpt` · `Edit` · `BlendShape` · `Weight`. `Ctrl+Tab` cycles to the next, `Ctrl+Shift+Tab` to the previous.
+There are four tabs. Their names are the same as on screen.
 
-`BlendShape` and `Weight` only work on `SkinnedMeshRenderer`. If you load a plain `MeshRenderer` and enter one of them, you'll see `BlendShape is for SkinnedMeshRenderer only.` instead.
-
-## Target Line
-
-One line tells you what you're editing right now.
-
-| Display | State |
+| Tab | Page |
 |---|---|
-| `No target — select an object and Load` | No renderer selected |
-| `Selected: {0} renderer(s) (press Load)` | Found candidates, haven't opened yet |
-| `Editing: {0}` | Editing one mesh |
-| `Editing {0} meshes together` | Editing multiple meshes at once |
+| `Shape` | [Shape](/guides/sculpt) |
+| `Select & Move` | [Select & Move](/guides/edit) |
+| `Shape Keys` | [Shape Keys](/guides/blendshape) |
+| `Bone Weights` | [Bone Weights](/guides/weight-paint) |
 
-On the same line are `Load` · `Bake` · `Revert` · `Edit (Tab)` · `X-Ray (Alt+Z)`.
+`Ctrl+Tab` goes to the next tab, and `Ctrl+Shift+Tab` goes to the previous one.
 
-If you've opened multiple meshes, an `Active target` selector appears too. → [Multiple Meshes](/guides/multi-mesh)
+`Shape Keys` and `Bone Weights` work only on `SkinnedMeshRenderer`. If you open them while only a plain `MeshRenderer` is loaded, the tab shows a notice that it cannot be used.
 
-### Load Candidates {#불러올-후보}
+## Start card
 
-Expand the candidate list before `Load` to see which renderers got picked. The title is `Load candidates`, and each row shows `{name} · {n} verts · {n} keys`.
+Before you start editing, the window shows a start card with four steps.
 
-| Warning | Means |
+1. Pick a target (select an object in the Hierarchy)
+2. Load
+3. Choose a mode (pick a tab)
+4. Save Mesh
+
+## Easy start and Expert views
+
+The window has two views: **Easy start** and **Expert**. Easy start shows the settings you use most often first. Expert opens the detailed settings too. Edit values and work stay the same in either view. You can open the detailed settings from `Detailed settings`.
+
+When you first open the window, **Easy start** is shown.
+
+## Target row and Load candidates {#불러올-후보}
+
+The `SkinnedMeshRenderer` and `MeshFilter + MeshRenderer` components inside the object you select in the Hierarchy are found as **Load candidates**. Each row of the list shows the name, the vertex count, the key count, and any warnings.
+
+- Click a row to load only that renderer.
+- Clear the selection and press `Load` to load all candidates.
+- A mesh with Read/Write turned off appears greyed out in its candidate row. Turn on the importer setting with the `Enable Read/Write` button in the status line, then press `Load`. → [Installation](/getting-started/installation#7-메쉬가-readwrite-꺼짐이라면)
+- Renderers that share one source mesh are each loaded and edited separately. Each renderer's result is saved separately.
+
+If you loaded several meshes, use the `Active target` selector to choose the target that `Shape Keys` and `Bone Weights` apply to. → [Multiple meshes](/guides/multi-mesh#활성-대상)
+
+## Status badges {#상태-배지}
+
+| Badge | Meaning |
 |---|---|
-| `[shared source]` | More than one renderer is using this source mesh. Loading together will exclude all but one automatically. |
-| `[no Read/Write]` | You need to enable Read/Write in the importer to edit this mesh |
+| `Saved` | Nothing has changed since `Load` |
+| `Unsaved` | There are unsaved edits |
+| `In transaction` | A shape key edit is in progress and not confirmed yet |
 
-Click a row to load just that renderer. Clear the selection to load all candidates together. Many candidates collapse to `+{0} more`.
+In a narrow window the badge is shortened. The full text stays in the tooltip.
 
-## Save Line
+## Save row
 
-Two save actions sit on one line. They do different things.
+The save row has two save actions. They do different things.
 
-| Button | Section | What it does |
-|---|---|---|
-| `Save as New Key` | `Quick BlendShape Capture` | Records only the changes you added to the base as a new key. The session continues |
-| `Bake` | `Save All Changes` | Saves the entire current Work Mesh to a mesh asset and ends the session |
-
-The `Key name` field on the left is the name `Save as New Key` will use.
-
-The window notes below: — `Execute this only after you're completely done. Quick capture is not Bake and has not yet changed the asset.` And: `Committed blend shape adds, edits, deletions, and reordering are saved together with both methods.`
-
-Both buttons are disabled while blend shape edits are uncommitted. → [BlendShape](/guides/blendshape#기존-키-편집)
-
-## Status Badge {#상태-배지}
-
-| Badge | Means |
+| Button | What it does |
 |---|---|
-| `SAVED` | Nothing has changed since the target was loaded |
-| `UNSAVED` | There are edits that have not been saved |
-| `IN TRANSACTION` | Blend shape edits are in progress and still uncommitted |
+| `Save as New Key` | Stores only the change you added to the base shape as a new shape key. The session continues. Enter the key name in `Shape key name (optional)` |
+| `Save Mesh` | Saves the whole Work Mesh as a mesh asset and ends the session |
 
-:::note[`SAVED` means "you didn't do anything"]
-The badge watches the session's change counter. Right after `Load` it's `SAVED`, but the moment you use a brush, it becomes `UNSAVED`.
-:::
+`Save Mesh` is the button to press once, when all the work is done. `Save as New Key` does not change the asset yet. Both buttons are disabled while a shape key edit is not confirmed. → [Shape Keys](/guides/blendshape#빠른-캡처와-bake)
 
-## Compact Mode {#컴팩트-모드}
+For a mesh with no shape keys, the key name field and the `Save as New Key` button are hidden.
 
-When the window height leaves less than 200px for content after the header, tabs, target line, save line, and status bar, it automatically switches to **compact mode.** It's not a toggle — it's automatic based on size.
+## Shape key edit bar
 
-What changes in compact mode:
+While you create or edit a shape key, a bar fixed at the top of the window appears. Use it to press `Save` (confirm the key edit) or `Cancel Key Edit`. The bar is visible on every tab.
 
-- The subtitle in the header collapses and the header gets shorter.
-- The `How to use` guide blocks inside tabs are hidden.
-- The `Key name` label on the save line disappears and the whole row is used by the field and buttons.
+- `Enter` saves the key edit, but only while the tab that owns the edit is active.
+- `Esc` cancels only the current stroke or size change. It does not discard the key edit.
+- `Cancel Key Edit` asks for confirmation once if you have sculpted something.
 
-Make the window taller vertically to go back to normal.
+## Status line
 
-## Shortcut Sheet {#단축키-시트}
+The status line at the bottom of the window shows the result of the last action and any guidance. The `Enable Read/Write` button also appears here.
 
-The `Keys` button in the Scene view hint bar opens and closes the shortcuts panel. The open state is remembered by the editor.
+## Recovery banner
 
-The panel shows two groups: **this tab's shortcuts + `Global` shortcuts.** The title is like `Sculpt · Shortcuts` with the tab name first.
+If Unity closed unexpectedly, the window shows a recovery banner the next time it opens. Press `Restore` to return the session to the last checkpoint. `Discard` needs two presses within 5 seconds. A file that cannot be restored is not deleted. → [Session and undo](/internals/session-and-undo#크래시-대비)
 
-The `BlendShape` tab has no registered rows, so you see `This tab has no registered shortcuts.` That tab's keys are in the `Global` group and the [Shortcuts](/reference/shortcuts#블렌드쉐이프) table in this documentation.
+## Save options when the scene is unsaved
 
-## Bake Result Table
+If the scene you are editing has never been saved, the window shows a notice. Press `Save Scene` in the notice to save the scene. Press `Discard edits` to throw the edit away. Objects in a scene that was never saved cannot keep their edits, so save the scene first. → [Session and undo](/internals/session-and-undo#자동-보존과-복원)
 
-When you `Bake` multiple meshes together, a `Bake results ({0}/{1} succeeded)` table stays in the window. Each row shows a mesh name and `OK` / `FAIL`.
+## Scene view hints and shortcut sheet {#단축키-시트}
 
-If any fail, `Bake failed ({0} succeeded / {1} failed) … failed sessions were kept so you can retry.` appears too. Only the successful ones become assets, and failed sessions stay open.
+A line of hints for the current tab appears at the top of the Scene view. Press `Keys` at the right end of the hint bar to open the full shortcut table for the current tab and the common shortcuts. Press it again to close the table. The window also has a button that opens the same shortcut sheet.
 
-## Scene View Hint Bar
+Shortcuts do not work while you type in a text field, and they do not change Unity's global Shortcut profile. The full list is on the [Shortcuts](/reference/shortcuts) page.
 
-A one-line hint bar floats at the top of the Scene view showing what operations you can do in this tab. The common part is `Tab=toggle edit · Ctrl+Tab=tool tab`, and the rest varies by tab.
+The hints, the tool panels, and the shortcut sheet are drawn above the Unity 2021.2 and newer Scene view overlay. On 2019.4 and 2020 they are drawn the older way.
 
-When editing is off, a `Resume Editing` button appears instead.
+## Save result table {#저장-결과표}
+
+When you run `Save Mesh` on several meshes together, a foldable result table lists the success or failure and the save path for each target. A target that failed keeps its session open, so you can try again. Only the targets that succeeded are written as assets.
+
+## Brush presets and Frame Selection
+
+Below the brush settings on `Shape` and `Bone Weights` there are preset slots. Click an empty slot to save the current brush. Click a saved slot to load it. `Frame Selection` (numpad `.`) fits the mesh being edited into the Scene view.

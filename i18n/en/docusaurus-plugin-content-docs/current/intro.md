@@ -1,91 +1,91 @@
 ---
 id: intro
-title: Easy Mesh Editor Introduction
+title: Introduction
 sidebar_label: Introduction
 slug: /
 ---
 
 # Easy Mesh Editor
 
-**A mini Blender inside Unity's Scene view.**
+**A mesh editing tool that works inside the Unity Scene view.**
 
-You don't need to leave your project to fix meshes. With the avatar in place and the pose showing exactly what you're looking at, push surfaces, delete vertices, create expression keys, and paint skin weights — all inside the editor. No more round trips of exporting FBX, re-importing, and re-setting materials, physics, and prefab references.
+You do not need to leave the project to fix a mesh. Push surfaces, move vertices, make shape keys, and paint skin weights on the pose you are looking at, with the avatar already dressed. The round trip of re-exporting the FBX, re-importing it, and re-linking materials, physics, and prefab references goes away.
 
-A tool for VRChat and WARUDO avatar creators. Pushing in places where clothing pierces the body, moving weights to new parts, and mirroring expression keys — the work that actually eats up your time all fits in this single window.
+It is built for people who make VRChat and WARUDO avatars and clothing. Pressing in the spot where clothing cuts into the body, moving weights onto new parts, and mirroring shape keys left and right are the tasks that take real time, and they all live in this one window.
 
-Unity Editor only. Not a runtime feature for player builds.
+Unity Editor only. It is not a runtime feature that goes into a player build.
 
-## Four Tabs
+## Four work tabs
 
 | Tab | What it does | Target |
 |---|---|---|
-| `Sculpt` | Push and pull surfaces with 5 brush types and smooth/flatten them | SkinnedMeshRenderer · MeshRenderer |
-| `Edit` | Select vertices/edges/faces, transform with gizmos, delete/separate/merge | SkinnedMeshRenderer · MeshRenderer |
-| `BlendShape` | Create, fix, and mirror expression keys; import from other meshes | SkinnedMeshRenderer only |
-| `Weight` | Paint bone weights, smooth, and import from other meshes | SkinnedMeshRenderer only |
+| `Shape` | Pull, smooth, flatten, gather, and inflate the surface with five brushes | SkinnedMeshRenderer, MeshRenderer |
+| `Select & Move` | Select, move, delete, separate, and merge vertices, edges, and faces | SkinnedMeshRenderer, MeshRenderer |
+| `Shape Keys` | Create and edit shape keys, make mirrored keys, and import keys from another mesh | SkinnedMeshRenderer only |
+| `Bone Weights` | Paint bone weights, merge them, and transfer them from another mesh | SkinnedMeshRenderer only |
 
-All four tabs share one edit session. When you switch tabs, your selections, masks, and undo history stay put.
+The four tabs share one editing session. Selection, masks, and undo history stay when you switch tabs.
 
-## The Original Mesh Stays Safe
+## The source asset is not touched
 
-This tool's safety model is one sentence: **The original mesh asset does not change until you press `Bake`.**
+The safety model of this tool fits in one sentence: **the source mesh asset does not change until you press `Save Mesh` (Bake).**
 
-1. Press `Load` and a temporary mesh (Work Mesh) is created from the original. The renderer switches to it.
-2. All edits happen on the Work Mesh.
-3. Press `Bake` and `<original>_Edit.asset` is created next to the original. The renderer switches to that asset.
-4. Press `Revert` or close the window and the renderer goes back to the original.
+1. `Load` creates a temporary copy of the source mesh (the Work Mesh), and the renderer uses that copy.
+2. Every edit happens on the Work Mesh.
+3. `Save Mesh` creates `<source name>_Edit.asset` next to the source, and the renderer switches to that asset.
+4. `Discard edits` throws away the edits, and the renderer goes back to the source.
 
-Even if the editor recompiles scripts or you enter Play Mode, your work doesn't just vanish. The Work Mesh is serialized to `Library/EmeAutoSave/` right before the reload, and automatically restored when the reload finishes. → [Session and Undo](/internals/session-and-undo)
+Recompiling scripts or entering Play Mode does not make your work disappear. The Work Mesh being edited is kept in `Library/EmeAutoSave/` and restored when you return to edit mode. → [Session and undo](/internals/session-and-undo)
 
-:::note[`Bake` ends the session]
-It's not a button you press while working. It's a button you press once at the end. If you want to save just one expression key during editing, use `Save as New Key` instead — it doesn't write to the asset yet. → [Quick capture vs Bake](/guides/blendshape#빠른-캡처와-bake)
+:::note[`Save Mesh` ends the session]
+Do not press it as you work. Press it once, when you are done. To keep only one expression as a shape key during editing, use `Save as New Key`. That does not change the asset yet. → [Quick capture and Save Mesh](/guides/blendshape#빠른-캡처와-bake)
 :::
 
-## First Steps
+## If this is your first time
 
-[Installation](/getting-started/installation) → [Your First Session](/getting-started/first-session) → [Using the Window](/guides/window)
+[Installation](/getting-started/installation) → [First editing session](/getting-started/first-session) → [Using the window](/guides/window)
 
-Installation section 1 specifies the supported Unity versions. If the `Editor/Shaders` folder is missing, the Scene view display won't work at all, so check that section first.
+Section 1 of the installation page lists the supported Unity versions. If the two shaders in `Editor/Shaders` are missing, the Scene view display does not work, so read that section first.
 
-## Where to Read
+## Where to start reading
 
-| Situation | Document |
+| Situation | Page |
 |---|---|
-| **Fit clothing to an avatar** | [Clothing Fit](/workflow/clothing-fit) |
-| Create expression keys | [Making Expression Keys](/workflow/expression-keys) |
-| Clothing pierces the body | [Sculpt](/guides/sculpt) |
-| Delete vertices or detach parts | [Edit](/guides/edit) |
-| New parts don't follow the pose | [Weight Paint](/guides/weight-paint) |
-| Handle multiple meshes at once | [Multiple Meshes](/guides/multi-mesh) |
-| Find out what a key does | [Shortcuts](/reference/shortcuts) |
-| Want to know what files were created | [Output Files](/reference/output-files) |
-| Something seems wrong | [Troubleshooting](/troubleshooting) |
-| Curious about why it works this way | [Session and Undo](/internals/session-and-undo) |
+| **Fitting clothing to an avatar** | [Clothing fit](/workflow/clothing-fit) |
+| Making a shape key | [Making shape keys](/workflow/expression-keys) |
+| Clothing cuts into the body | [Shape](/guides/sculpt) |
+| Deleting vertices or separating parts | [Select & Move](/guides/edit) |
+| A new part does not follow the pose | [Bone Weights](/guides/weight-paint) |
+| Working on several meshes at once | [Multiple meshes](/guides/multi-mesh) |
+| Finding what a key does | [Shortcuts](/reference/shortcuts) |
+| Knowing what a saved file is | [Generated files](/reference/output-files) |
+| Something looks wrong | [Troubleshooting](/troubleshooting) |
+| Understanding why it works this way | [Session and undo](/internals/session-and-undo) |
 
-## Document Structure
+## How the docs are organized
 
-**Tab usage guides** correspond 1:1 with the four tabs in the window. You can find the document by the exact tab name shown on screen.
+The **Tab guides** section matches the four tabs of the window one to one. You can find a page by the tab name you see on screen.
 
-| Tab in window | Document |
+| Tab in the window | Page |
 |---|---|
-| Window common (header, target, save) | [Using the Window](/guides/window) |
-| `Sculpt` | [Sculpt](/guides/sculpt) |
-| `Edit` | [Edit](/guides/edit) |
-| `BlendShape` | [BlendShape](/guides/blendshape) |
-| `Weight` | [Weight Paint](/guides/weight-paint) |
+| Common to the window (header, target, save) | [Using the window](/guides/window) |
+| `Shape` | [Shape](/guides/sculpt) |
+| `Select & Move` | [Select & Move](/guides/edit) |
+| `Shape Keys` | [Shape Keys](/guides/blendshape) |
+| `Bone Weights` | [Bone Weights](/guides/weight-paint) |
 
-:::note[Labels are exactly as they appear on screen]
-Phrases in backticks in this document (`Load`, `Auto Normalize`, `Merge by Distance`, ...) are **labels actually displayed in the Korean UI.** If you're using the English or Japanese window, see the documentation for that language.
+:::note[Labels are the text shown on screen]
+Text in backticks (`Load`, `Auto Normalize`, `Merge by Distance`, and so on) is the label the UI actually shows. If you use the window in Korean or Japanese, read the page for that language.
 :::
 
-## Feedback
+## Reporting problems
 
-Bug reports, questions, feedback: `studioraming@gmail.com`
+Bugs, questions, and feedback: `studioraming@gmail.com`
 
-When you submit, including the following speeds up reproduction:
+When you report a problem, these details help us reproduce it quickly.
 
-1. Unity version (e.g., `2022.3.22f1`)
+1. Unity version (for example `2022.3.22f1`)
 2. Render pipeline (BRP / URP)
-3. Easy Mesh Editor version (badge at top right of window, or version badge at top of this site)
-4. Full Console log
-5. Reproduction steps — what mesh you `Load`ed and what you clicked in which tab
+3. Easy Mesh Editor version (the version badge in the window header, or the badge at the top of this site)
+4. The full Console log
+5. Steps to reproduce: which mesh you loaded, and what you pressed on which tab

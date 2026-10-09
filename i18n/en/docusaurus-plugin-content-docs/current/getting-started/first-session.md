@@ -1,80 +1,76 @@
 ---
 id: first-session
-title: Your First Session
+title: First editing session
 sidebar_position: 2
 ---
 
-# Your First Session
+# First editing session
 
-**After reading this document**, you can go from selection through `Bake` in one loop, learn how to temporarily turn off editing with `Tab`, and how to undo everything with `Revert`.
+**After reading this page** you can go all the way from choosing a target to `Save Mesh`. You will also know how to pause edit input with `Tab` and how to undo everything with `Discard edits`.
 
 ## 1. Select and `Load`
 
-1. In the Hierarchy, select one or more objects to edit. It also finds `SkinnedMeshRenderer` and `MeshFilter + MeshRenderer` on children.
+1. In the Hierarchy, select one or more objects to edit. Child `SkinnedMeshRenderer` and `MeshFilter + MeshRenderer` components are found too.
 2. Open `StudioRaming > Easy Mesh Editor`.
-3. Check that the target line shows `Selected: {0} renderer(s) (press Load)` and press `Load`.
+3. The start card shows the order `Pick target → Load → Choose mode → Save Mesh`. When the target row shows the number of renderers found, press `Load`.
 
-If you want to see which renderers got picked up before `Load`, expand the `Load candidates` list. Each row shows vertex count, blend shape count, and warnings like `[shared source]` and `[no Read/Write]`. Click one row to load just that renderer. → [Using the Window](/guides/window#불러올-후보)
+To see which renderers were found before you load, expand the `Load candidates` list. Each row shows the name, the vertex count, the key count, and any warnings. Click a row to load only that renderer. Clear the selection to load every candidate. → [Using the window](/guides/window#불러올-후보)
 
-When `Load` finishes, the status under the header changes to `Editing: {0}`. From this moment on, the renderer is using the Work Mesh instead of the original.
+When loading finishes, the editing state starts. From this point the renderer uses the Work Mesh, not the source asset.
 
 ## 2. Edit
 
-Pick a tab and start working.
+Pick a tab and work.
 
 | What you want to do | Tab |
 |---|---|
-| Push or puff the surface | `Sculpt` → [docs](/guides/sculpt) |
-| Move vertices or delete faces | `Edit` → [docs](/guides/edit) |
-| Create expression keys | `BlendShape` → [docs](/guides/blendshape) |
-| Paint bone weights | `Weight` → [docs](/guides/weight-paint) |
+| Pull or inflate the surface | `Shape` → [page](/guides/sculpt) |
+| Move vertices or delete faces | `Select & Move` → [page](/guides/edit) |
+| Make a shape key | `Shape Keys` → [page](/guides/blendshape) |
+| Paint bone weights | `Bone Weights` → [page](/guides/weight-paint) |
 
-You can freely switch between tabs. Selections, masks, and undo history stay with you when you move tabs.
+You can move between tabs freely. Use `Ctrl+Tab` for the next tab and `Ctrl+Shift+Tab` for the previous one. Selection, masks, and undo history stay when you switch tabs.
 
-Undo is Unity's `Ctrl+Z` as usual. Each brush stroke, each gizmo transform, each weight edit, each structural change is one step. → [Session and Undo](/internals/session-and-undo)
+Undo uses `Ctrl+Z`. One brush stroke, one gizmo drag, one weight operation, and one structural change are each one undo step. → [Session and undo](/internals/session-and-undo)
 
-## 3. `Tab` — Temporarily Turn Off Editing
+## 3. `Tab`: pause editing
 
-Sometimes when you just want to rotate the camera in the Scene view, clicks keep registering as selection. Press `Tab` to turn off edit input only. The session stays alive.
+Sometimes you want only to move the camera in the Scene view, but clicks keep selecting things. Press `Tab` to turn off edit input. The session stays alive.
 
-While editing is off, the window tells you this:
-
-> `Editing is temporarily off. Your work is preserved — use the 'Edit' toggle or the Scene-view 'Resume Editing' button to continue.`
-
-To turn it back on, press `Tab` again, or press the `Resume Editing` button in the Scene view or the `Edit (Tab)` toggle in the window.
+To turn editing back on, press `Tab` again, or press the start editing button shown in the Scene view.
 
 :::note[`Tab` does not discard the session]
-The session only ends with `Bake` or `Revert`. `Tab` is an input switch.
+Only `Save Mesh` or `Discard edits` end the editing session. `Tab` is an input switch.
 :::
 
-## 4. Check the Unsaved Badge
+## 4. Check the unsaved badge
 
-The badge in the header tells you the current state.
+The badge on the target row shows the current state.
 
-| Badge | Means |
+| Badge | Meaning |
 |---|---|
-| `SAVED` | Nothing has changed since `Load` |
-| `UNSAVED` | There are edits that haven't been saved |
-| `IN TRANSACTION` | Blend shape edits are still open and uncommitted |
+| `Saved` | Nothing has changed since `Load` |
+| `Unsaved` | There are unsaved edits |
+| `In transaction` | A shape key edit is not confirmed yet |
 
-If it says `IN TRANSACTION`, `Bake` is blocked. Use `Enter` (save) or `Esc` (cancel) in the pinned bar at the top to close it first. → [BlendShape](/guides/blendshape#기존-키-편집)
+While the badge shows `In transaction`, `Save Mesh` is blocked. Use the bar pinned at the top of the window to press `Save` (confirm the key edit) or `Cancel Key Edit` first. → [Shape Keys](/guides/blendshape#기존-키-편집)
 
-## 5. `Bake` to Save
+## 5. Finish with `Save Mesh`
 
-Press `Bake` in the `Save All Changes` section.
+When you are done, press `Save Mesh`.
 
-- `<original>_Edit.asset` is created next to the original and the renderer switches to that asset.
-- If any unreferenced orphan vertices remain, they are cleaned up at this point.
-- The session ends. To continue working, you need to `Load` again.
+- `<source name>_Edit.asset` is created next to the source, and the renderer switches to that asset.
+- Vertices that no face uses are cleaned up once at this point.
+- The session ends. To keep working, press `Load` again.
 
-If you edited multiple meshes together, a `Bake results ({0}/{1} succeeded)` table appears. Failed sessions are kept, so you can fix the cause and try again. → [Output Files](/reference/output-files)
+If you edited several meshes together, a result table appears for each target. A session whose save failed stays open, so you can fix the cause and try again. → [Generated files](/reference/output-files)
 
-:::caution[`Bake` once at the end]
-The window will tell you to run it just once after you've finished your work. If you need intermediate saves, use `Save as New Key` (quick blend shape capture) instead — it doesn't end the session and hasn't written to the asset yet.
+:::caution[`Save Mesh` is for the last step]
+If you need an intermediate save, use `Save as New Key`. It does not end the session, and it does not change the asset yet. → [Quick capture in Shape Keys](/guides/blendshape#빠른-캡처와-bake)
 :::
 
-## 6. `Revert` — Discard Everything
+## 6. `Discard edits`: throw everything away
 
-`Revert` asks `Discard all edits and restore the original. Continue?` then puts the renderer back on the original mesh. It doesn't delete the asset you already made with `Bake`.
+`Discard edits` throws away the whole current edit and returns the renderer to the source mesh. It asks for confirmation first. In the confirmation dialog, `Enter` and `Esc` both keep your work. Only the button that names the action runs it. A mesh already written by `Save Mesh` is not deleted.
 
-If you just close the window or try to enter Play Mode without saving, and there are unsaved edits, it will ask you to `Bake` / `Discard` (or `Cancel` for Play Mode).
+Closing the window or entering Play Mode does not ask about unsaved edits. They are kept. In Play Mode the source mesh is shown, and the edits come back when you return to edit mode. → [Session and undo](/internals/session-and-undo#자동-보존과-복원)

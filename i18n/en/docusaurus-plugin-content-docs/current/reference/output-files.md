@@ -1,89 +1,84 @@
 ---
 id: output-files
-title: Output Files
+title: Generated files
 sidebar_position: 3
 ---
 
-# Output Files
+# Generated files
 
-**After reading this document**, you'll understand what this tool creates in your project, why it updates existing files in some cases and creates new ones in others, and how it never overwrites someone else's assets.
+**After reading this page** you will know what this tool creates in your project, why it updates an existing file in some cases and creates a new one in others, and why it never overwrites someone else's asset.
 
-## Three Types
+## Three kinds
 
-| Path | When | Version Control |
+| Path | When | Version control |
 |---|---|---|
-| `<original>_Edit.asset` | `Bake` | Commit this |
-| `<original>_Part.asset` | `Separate Selection (P)` · `Separate by Islands (Shift+P)` | Commit this |
-| `Library/EmeAutoSave/<id>.asset` | Auto-saved right before domain reload | Don't commit |
+| `<source name>_Edit.asset` | `Save Mesh` | Commit it |
+| `<source name>_Part….asset` | Pieces split off during `Save Mesh` | Commit it |
+| `Library/EmeAutoSave/` | Edits kept on reload, Play, window close, and so on | Do not commit |
 
-The first two are created **next to the original mesh asset.** The third is under `Library/`, so Unity treats it as cache and excludes it from version control.
+The first two are created **next to the source mesh asset**. The third is under `Library/`, so Unity treats it as a cache, and version control ignores it.
 
 ## `_Edit.asset`
 
-The final mesh asset created by `Bake`. Once created, the renderer switches to this asset.
+This is the final mesh asset that `Save Mesh` creates. The renderer switches to this asset as soon as it is created.
 
-Contents: vertices, normals, tangents, UV0~UV7, colors, submesh·material correspondence, bindpose, bone weights (including variable bone weights on 2020.1+), all blend shape frames.
+It holds: vertices, normals, tangents, UV0 to UV7, colors, submesh and material mapping, bindposes, bone weights (including variable bone weights), and all blend shape frames.
 
-During `Bake`, any unreferenced orphan vertices are cleaned up — `Cleaned up {0} unused vertices`. → [Bake Details](/internals/bake)
+During saving, vertices that no triangle uses are cleaned up once. → [Save Mesh internals](/internals/bake)
 
-The mesh object's name inside the asset is matched to the filename.
+The mesh object inside the asset is renamed to match the file name.
 
 ## `_Part.asset`
 
-Created when you separate in the `Edit` tab. A new GameObject appears in the scene, and its renderer uses this asset.
+When you separate pieces on `Select & Move` and then run `Save Mesh`, one `_Part` asset is created for each piece. Each piece becomes a new GameObject in the scene, and that renderer uses the asset.
 
-If separation fails midway, the partial `_Part.asset` is deleted and the original stays intact — `Separate failed, reverted: {0}`
+If saving fails partway, the partial `_Part.asset` is deleted, and the source stays as it was.
 
-## Provenance and Owner {#provenance와-owner}
+## Provenance and owner {#provenance와-owner}
 
-Output assets carry a **marker of where they came from.** This marker decides two things:
+Each output asset stores a record of **where it came from**. This record decides two things.
 
-1. Whether to **update the same file or create a new one** on next `Bake`
-2. **Never touch anyone else's asset** even if the name overlaps
+1. Whether a new `Save Mesh` **updates the same file or creates a new one**
+2. Whether the tool **avoids overwriting someone else's asset** that has the same name
 
-The marker is in the form `<source mesh GUID>:<localId>@<renderer owner token>`.
+The record holds the source mesh GUID and the renderer's owner token.
 
 | Situation | Result |
 |---|---|
-| `Bake` again from same source, same renderer | **Update the existing `_Edit.asset` while keeping its GUID** |
-| Different renderer using the same source mesh | Creates a separate output file |
-| Someone else's asset with the same name exists | Won't overwrite; creates a unique new path |
+| Same source, same renderer, `Save Mesh` again | The existing `_Edit.asset` is **updated and keeps its GUID** |
+| Another renderer that uses the same source mesh | A separate output file is created |
+| An asset with the same name already belongs to someone else | It is not overwritten. A unique path is created |
 
-Keeping the GUID is important. Prefabs, animations, and other scenes that reference that mesh don't break.
+Keeping the GUID matters. Prefabs, animations, and other scenes that reference the mesh do not break.
 
-Reloading a renderer using an already-`Baked` asset and continuing work updates the output and syncs any other loaded renderers using the same asset with the new data.
+If you load a renderer that already uses an output asset from this tool and keep working, the output is updated. Other loaded renderers that use the same asset are synchronized with the new data.
 
-:::caution[Can't identify renderers if the scene isn't saved]
-The owner token comes from the renderer's global ID. If the scene has never been saved, that ID doesn't exist, and the window tells you:
-
-> `The scene is not saved yet, so the renderer cannot be identified. Renderers that share the same source mesh will share one output asset until the scene is saved.`
-
-If you have multiple renderers sharing the same mesh, save the scene first.
+:::caution[Save the scene, or the renderer cannot be identified]
+The owner token comes from the renderer's global ID. If the scene has never been saved, that ID does not exist, and the window tells you so. If several renderers use the same source mesh, save the scene once before you start.
 :::
 
 ## `Library/EmeAutoSave/` {#자동-저장-폴더}
 
-Right before the editor recompiles scripts, the Work Mesh is serialized here, and auto-restored when reload finishes.
+This folder holds the Work Mesh that is being edited. Edits are saved here on domain reload, entering Play Mode, closing the window, closing the scene, and quitting Unity. They are restored when you return to edit mode or reopen the window or the scene.
 
-- On restore: `Easy Mesh Editor: restored auto-saved edit sessions ({0})`
-- On failure: `Easy Mesh Editor: failed to restore {0} auto-saved session(s). The files were kept at: {1}` — files aren't deleted, so you can investigate the cause.
+This is a **safety net, not the result of your work**. The final save is always `Save Mesh`. → [Session and undo](/internals/session-and-undo#자동-보존과-복원)
 
-This is a **safety net, not the result of your work.** Final saving is always `Bake`. → [Session and Undo](/internals/session-and-undo#자동-저장과-복원)
+If the save fails, Play Mode and quitting stop, and the reason appears in the status line. The file is not deleted, so you can check the cause.
 
-## Filtered Before Save
+## Things that block saving
 
-Invalid data is caught before it becomes a file.
+Invalid data is filtered out before it reaches a file.
 
-- NaN / Infinity coordinates
+- NaN or Infinity coordinates
 - Topology mismatch
 - Weight array length mismatch
 
-Failed sessions are **kept open**, so you can fix the cause and `Bake` again.
+A session whose save failed **stays open**, so you can fix the cause and press `Save Mesh` again.
 
-## What's Safe to Delete
+## What you can delete
 
-| File | Safe to Delete |
+| File | Safe to delete? |
 |---|---|
-| `_Edit.asset` | No if the renderer is using it. Revert to original first, then delete. |
-| `_Part.asset` | Yes after you delete that part object |
-| `Library/EmeAutoSave/` | Anytime. Just loses the session it could restore |
+| `_Edit.asset` | Not while a renderer uses it. Return the renderer to the source first, then delete |
+| `_Part.asset` | Yes, after you delete the piece's GameObject |
+| `Library/EmeAutoSave/` | Yes, at any time. You only lose the session that would have been restored |

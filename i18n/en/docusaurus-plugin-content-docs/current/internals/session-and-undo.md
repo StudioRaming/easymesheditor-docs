@@ -1,109 +1,115 @@
 ---
 id: session-and-undo
-title: Session and Undo
+title: Session and undo
 sidebar_position: 1
 ---
 
-# Session and Undo
+# Session and undo
 
-**After reading this document**, you'll understand what `Load` actually changes, why undo works in clean strokes, what transactions are and why they block `Bake`, and how your work survives script compilation.
+**After reading this page** you will know what `Load` actually changes, why undo works in clean per-operation steps, what a shape key edit is and why it blocks `Save Mesh`, and why work survives script compilation and Play Mode.
 
 ## Work Mesh {#work-mesh}
 
-Press `Load` and the tool **clones** the original mesh to create a temporary mesh, then changes the renderer's mesh reference to that copy. This copy is the Work Mesh.
+When you press `Load`, the tool **copies** the source mesh into a temporary mesh, and it points the renderer's mesh reference at that copy. The copy is the Work Mesh.
 
-- The original asset file is never opened or written.
-- All edits — brushes, gizmos, weights, blend shape structure changes — happen on the Work Mesh.
-- When the session ends (`Revert`, close window, enter Play Mode), the renderer goes back to referencing the original, and the Work Mesh is discarded.
+- The source asset file is never opened or written.
+- Every edit (brushes, gizmos, weights, and structural changes to shape keys) happens on the Work Mesh.
+- When the session ends (`Discard edits`, or switching to another target), the renderer points back to the source, and the Work Mesh is thrown away.
 
-Only `Bake` exports this copy to a file. → [Bake Details](/internals/bake)
+Only `Save Mesh` writes this copy to a file. → [Save Mesh internals](/internals/bake)
 
-## Weld Groups {#웰드-그룹}
+## Weld groups {#웰드-그룹}
 
-Unity meshes **split vertices at the same position** at UV seams, normal seams, and material boundaries. On screen it looks like one point, but the data has several.
+Unity meshes split vertices at UV seams, normal seams, and material borders, so **several vertices sit at the same position**. On screen it looks like one point, but the data holds two to four of them.
 
-The tool groups vertices at the same local-space position into one **weld group.**
+The tool treats vertices with the same local-space position as one **weld group**.
 
-- Selection grabs the whole group.
-- Brush and gizmo transforms write the same value to the entire group.
-- Weight paint results are recorded identically across the whole group.
+- A selection takes the whole group.
+- Brushes and gizmo transforms write the same value to the whole group.
+- Weight painting also writes the same value to the whole group.
 
-This is why "moving one vertex doesn't tear the UV seam" works.
+This is why moving one vertex does not split a UV seam.
 
-Symmetry also relies on this concept. Left-right correspondence is found by group matching of local bind-pose positions, not indices — so it works even if left/right vertex counts aren't exactly the same.
+Symmetry uses the same idea. Left and right partners are found from the local-space bind positions, not from indexes. That is why it works even when the left and right vertex counts are not exactly equal.
 
 ## Undo {#되돌리기}
 
-Uses Unity's `Ctrl+Z` directly. The tool doesn't maintain its own undo stack; it sits on top of Unity's.
+The tool uses Unity's `Ctrl+Z` directly. It does not keep its own undo stack. It adds its steps to Unity's.
 
 **One intent = one undo step** is the rule.
 
-| Operation | Undo Unit |
+| Operation | Undo unit |
 |---|---|
-| Brush stroke | Entire stroke from press to release = one step |
-| Gizmo transform | One drag = one step |
-| `G`/`R`/`S` modal | One confirm = one step |
-| Weight brush | One stroke = one step |
-| `Smooth Selected Bones` slider | Release = one step |
-| Delete, separate, merge, key structure change | One operation = one step |
-| Multi-mesh batch operation | Entire batch = one compound step |
+| Brush stroke | One stroke, from mouse down to mouse up |
+| Gizmo transform | One drag |
+| `G`/`R`/`S` modal | One confirmation |
+| Weight brush | One stroke |
+| Smooth checked bones slider | One step, confirmed when you release |
+| Delete, separate, merge, shape key structure change | One operation |
+| Painted region tools | One application |
+| Multi-mesh batch operation | The whole operation as one composite step |
 
-Mask changes are undo targets. **Hide is not** — it's a session display state, not mesh data (same rule as Blender).
+Mask changes are undo steps too. **Hiding is not**, because hiding is display state of the session, not mesh data.
 
-### Structural Snapshots
+### Structure snapshots
 
-Operations that change vertex count or indices (delete, separate, merge, add/remove keys) can't be recovered by undoing a single value. These operations **snapshot the entire mesh before the operation**, and undo restores from that snapshot.
+Operations that change the vertex count or the indexes (delete, separate, merge, adding and deleting keys) cannot be undone by restoring a single value. For these operations, the tool takes a **snapshot of the whole mesh before the operation**, and restores it when undo runs.
 
-Snapshot contents: vertices, normals, tangents, UV0~UV7, colors, triangle and submesh topology, bindpose, bone weights (including variable), all blend shape frames.
+Snapshots use memory, so there is a limit. When the limit is reached, the oldest snapshots are dropped, and the tool tells you.
 
-Snapshots consume memory and have a limit. When exceeded, the oldest are dropped — `Structural undo history exceeded its memory budget; dropped {0} of the oldest records.`
+## Shape key edit {#트랜잭션}
 
-## Transaction {#트랜잭션}
+Creating a new key and editing an existing key both take several steps, and the intermediate state must not be saved. So each one is wrapped in a clear start and end. This wrapper is called a transaction.
 
-Blend shape **new shape sculpting** and **editing existing keys** span multiple steps and intermediate states shouldn't be saved as-is. So they're wrapped in an explicit transaction.
+- When it starts, the badge changes to `In transaction`, and a bar is pinned in the Scene view and the window.
+- `Enter` confirms, and `Esc` cancels the stroke. `Esc` does not discard the key edit.
+- While the edit is open, both `Save Mesh` and `Save as New Key` are blocked.
 
-- Starting a transaction makes the badge `IN TRANSACTION` and a pinned bar appears in the Scene view.
-- `Enter` = commit, `Esc` = cancel. Same keys work even if the window has focus.
-- While open, both `Save as New Key` and `Bake` are blocked.
+You can move to `Shape` and `Select & Move` while the edit is open. However, you cannot save a key from an operation that changes the vertex count.
 
-You can switch to `Sculpt` or `Edit` tabs during a transaction to work. But operations that change vertex count can't be saved as keys — `Vertex count changed; cannot save as blend shape. Undo structural changes and retry.`
+### When undo makes the edit invalid {#되돌리기가-편집을-무효로-만들-때}
 
-### When Undo Invalidates a Transaction
+If `Ctrl+Z` goes back earlier than the start of the edit, the edit loses its reference point. In that case the tool does not continue quietly. It cancels the edit. Redo follows the same rule. The decision is based on a value recorded when the edit started, so the result is always the same.
 
-If `Ctrl+Z` goes past the transaction start point, the edit baseline disappears. The tool doesn't silently continue; it cancels the edit.
+The window then shows: `Undo stepped back past the start of the '{edit name}' edit, invalidating its preview. The edit was cancelled for safety.`
 
-> `Undo went back before '{0}' edit started, invalidating changes. Cancelled for safety.`
+## Automatic keeping and restore {#자동-보존과-복원}
 
-Redo follows the same rule. The decision is deterministic, based on a value recorded at transaction start, not observation.
+When you save a script, Unity reloads the domain, and most of the window state is reset at that point. If the editing session were left alone, unsaved work would disappear without any warning.
 
-## Autosave and Restore {#자동-저장과-복원}
+So the tool keeps the Work Mesh being edited in `Library/EmeAutoSave/` at these moments.
 
-Unity reloads the domain every time you save a script. Most editor window state resets. Sessions would silently lose unsaved work.
+- Just before a domain reload
+- Just before entering Play Mode
+- When the window is closed, and when the scene is closed
+- When Unity quits
 
-So right before reload:
+A kept edit is restored automatically within the same editor run (including after a domain reload), or after Unity quit in an orderly way and is opened again. Vertices, shape keys, weights, and the unsaved state all come back as they were. In Play Mode the source mesh is shown.
 
-1. Silently commit any open transaction (no modal — can't show during reload). Cancel if commit fails.
-2. Serialize the Work Mesh to `Library/EmeAutoSave/<renderer ID>.asset`.
-3. After reload finishes, automatically reload and restore the session — `Easy Mesh Editor: restored auto-saved edit sessions ({0})`
+- If keeping fails, Play Mode entry and quitting are stopped, and the reason appears in the status line.
+- A scene that has never been saved cannot keep its objects, so the window asks you to save the scene first. Use the `Save Scene` and `Discard edits` buttons in the window to handle it right away.
+- If several windows are open, only one of them is restored.
+- A file that cannot be restored is not deleted.
 
-Known limits:
+After a restore, the status line shows `Restored {N} preserved edit(s). Edits made before the restore cannot be undone with Ctrl+Z.`
 
-- No dirty check. `Load` alone triggers save/restore even if nothing changed.
-- If two windows are open, only one restores.
-- Editor crashes are not handled.
+## Crash checkpoints {#크래시-대비}
 
-Closing or entering Play Mode doesn't auto-save — it asks — `Bake` / `Discard` (Play Mode adds `Cancel`). → [Output Files](/reference/output-files#자동-저장-폴더)
+While there are unsaved edits, and only when the content has changed, the tool writes a checkpoint between edits, at least 60 seconds apart. If Unity closes unexpectedly or is forced to quit, nothing is restored automatically. The window shows a banner the next time it opens.
 
-## Ways Sessions End
+- `Restore`: returns the session to the checkpoint.
+- `Discard`: needs two presses within 5 seconds to run.
+
+A file that cannot be restored is not deleted.
+
+## How a session ends {#세션이-끝나는-방법}
 
 | Method | Result |
 |---|---|
-| `Bake` | Save to asset, end |
-| `Revert` | Restore original, end |
-| Close window | Ask first, then end |
-| Enter Play Mode | Ask first, then end |
-| Switch target | `'{0}' unsaved. Discard edits and switch?` |
+| `Save Mesh` | Saves to an asset and ends |
+| `Discard edits` | Returns to the source and ends. It asks for confirmation |
+| Switch to another target | If there are unsaved edits, the tool shows a notice and does not switch |
 
-`Tab` is not here. It only turns off edit input; the session stays alive.
+`Tab` is not on this list. It only turns off edit input, and the session stays alive.
 
-If a renderer or mesh disappears from the scene during a session, only that session is quietly cleaned up; others stay.
+If a renderer or mesh disappears from the scene during a session, only that session is cleaned up quietly. The others stay open.
