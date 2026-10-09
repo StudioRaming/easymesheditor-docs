@@ -183,3 +183,13 @@ Changes requested for the Ops drafts (Ops files were not edited by this worktree
 - `node scripts/check-translations.mjs en`: 22 expected, 0 missing, 0 problem(s).
 - `node scripts/check-translations.mjs ja`: 22 expected, 0 missing, 0 problem(s).
 - CONFIRM markers left: 15 lines in ko, en, ja (D2 x3 changelog, F4 x3 changelog, F4 x3 blendshape, D4 x3 installation, S1 x3 third-party).
+
+## 5. i18n pass 2026-10-10 (task MM-EME-PR-INTEG-RELEASE-20261009, decisions G3/D14)
+
+- UI names in ko/en/ja were checked against the product Lang tables (EasyMeshLang*.cs at 4ffb28c). Wrong names fixed (badges EDITING KEY / キー編集中 / 키 편집 중,
+  Reset All to 0, Commit as New Key, Max Influences, Scope, Overlay Blend, ja ウェイトを取得 / 距離でマージ / 球形 / 反復回数 and more).
+- ko particle bugs from an old bone rename fixed (본를, 본가, 본로, 본는 ...). "Equal weight per mesh" was described as a per-mesh pivot; it weights the shared pivot per mesh (Edit.PivotMultiEqual.tip). Fixed in 3 languages.
+- Decisions applied: D4 (package name), D7 (notice on intro and install pages), D11/D12 (Unity 2019.4 ~ Unity 6, BRP and URP, "support included"), D13 (latest MingToon; Face Proxy now documented),
+  D16 and the RC2 README items (unchanged meshes skipped on Save Mesh, recovery banner cases, Play mode card, Separate/Delete selection buttons, read-only source meshes, _Edit 1.asset).
+- README finding: the shipped README names the third badge "트랜잭션 중", but the product label is "키 편집 중" / EDITING KEY / キー編集中 (Window.TransactionBadge). The site follows the Lang table.
+- Remaining CONFIRM comment: third-party credits (S1). D2 release date is left out of the changelog.
