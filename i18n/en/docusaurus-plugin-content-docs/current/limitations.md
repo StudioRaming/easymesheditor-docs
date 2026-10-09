@@ -57,8 +57,9 @@ All three create new faces, so they are separate work and are not in this versio
 ## Runtime environment
 
 - **Unity Editor only.** It is not a runtime feature for player builds.
-- Supported versions: **Unity 2019.4, 2021.3, 2022.3, 6000.0, and 6000.3 (LTS)**.
+- Supported versions: **Unity 2019.4 ~ Unity 6 (6000.0, 6000.3 LTS)**, Built-in RP and URP.
 - Installing the DLL edition and the source edition in the same project causes compile errors.
+- A source mesh outside the `Assets` folder (Unity built-in meshes, package meshes) is read-only and cannot be saved by `Save Mesh`. The window says so from `Load` on. 1.0 does not copy it for you, so copy the mesh into the `Assets` folder, assign the copy to the renderer, then load it again.
 
 ## Recommendation
 

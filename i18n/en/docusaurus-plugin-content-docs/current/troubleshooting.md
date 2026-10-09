@@ -24,6 +24,7 @@ Look up the symptom. Most cases come down to one of three things: the session is
 | No mesh renderer | Check that a renderer exists, including on child objects |
 | Read/Write is off | Press `Enable Read/Write` in the status line, then press `Load` again |
 | Renderers share one source mesh | They are now loaded and edited separately. Remove the ones you do not need from the candidate list |
+| The source mesh is outside the `Assets` folder | Unity built-in meshes and package meshes are read-only, so `Save Mesh` cannot save them. Copy the mesh into the `Assets` folder, assign the copy to the renderer, then load it again |
 
 ## `Shape Keys` and `Bone Weights` tabs are disabled
 
@@ -31,7 +32,7 @@ Both tabs work only with `SkinnedMeshRenderer`. If you loaded several meshes tog
 
 ## The `Save Mesh` button does not respond
 
-Check whether the badge says `In transaction`. If a shape key edit is not confirmed, both `Save Mesh` and `Save as New Key` are blocked. Press `Save` (confirm) or `Cancel Key Edit` on the pinned bar at the top of the window first. → [Shape Keys](/guides/blendshape#기존-키-편집)
+Check whether the badge says `EDITING KEY`. If a shape key edit is not confirmed, both `Save Mesh` and `Save as New Key` are blocked. Press `Save` (confirm) or `Cancel Key Edit` on the pinned bar at the top of the window first. → [Shape Keys](/guides/blendshape#기존-키-편집)
 
 ## Nothing is drawn in the Scene view
 
@@ -57,7 +58,7 @@ Both `Shape` and `Select & Move` use `Alt+Shift+X` / `Y` / `Z` for the axis symm
 
 | Cause | What to do |
 |---|---|
-| The wrong axis is selected | Turn on `Show symmetry plane` and check the plane position |
+| The wrong axis is selected | Turn on `Plane` and check the plane position |
 | The mesh is not symmetric to begin with | Vertices with no partner are left out of symmetry |
 
 ## Painting weights does nothing
@@ -66,11 +67,11 @@ Both `Shape` and `Select & Move` use `Alt+Shift+X` / `Y` / `Z` for the axis symm
 |---|---|---|
 | No active bone | The tab asks you to choose a bone | Choose the bone with the radio button in the list |
 | The bone is locked | The Scene view says the vertices were skipped because the target bone is locked | Release the `L` on the row |
-| All four slots are full | Weak values are skipped, and the count is shown | Remove weight from another bone first, or check `Maximum bone influences` |
+| All four slots are full | Weak values are skipped, and the count is shown | Remove weight from another bone first, or check `Max Influences` |
 
 ## A weight transfer result is off everywhere
 
-The transforms of the source and target differ. If the window shows a warning, turn on `Ignore source transform (match in bind pose local space)` and run the transfer again. → [Bone Weights](/guides/weight-paint#전송-공간)
+The transforms of the source and target differ. If the window shows a warning, turn on `Ignore source transform (match in bind-pose local space)` and run the transfer again. → [Bone Weights](/guides/weight-paint#전송-공간)
 
 If only some vertices are off, raise `Max distance` a little. The out-of-range count goes down.
 

@@ -111,7 +111,7 @@ Choose the reference point for rotation and scale. It applies to both the gizmo 
 | Active element | The element you selected last |
 | Bounding box center | The center of the box that encloses the selection |
 
-When several meshes are edited together, turn on `Per-mesh pivot` to give each mesh its own pivot.
+When several meshes are edited together, turn on `Equal weight per mesh` to compute the shared pivot with the same weight for each mesh instead of by vertex count.
 
 ## Hide {#숨기기}
 
@@ -138,6 +138,12 @@ Flip also reverses the normal and tangent deltas of the blend shapes, so inside 
 ## Delete {#삭제}
 
 `X` or `Delete` removes the selected faces. A vertex used only by those faces stays in the buffer until `Save Mesh`, when it is cleaned up once. → [Cleanup of unused vertices](/internals/bake#고아-정점-정리)
+
+### Separate Selection and Delete buttons {#선택-분리-선택-삭제-버튼}
+
+While faces are selected, `Separate Selection (P)` and `Delete (X · N faces)` also appear under the selection tools. They run the same commands as the collapsed `Mesh Operations` section (in Easy start, under `Detailed settings`), and what a press did is shown under the buttons for a while.
+
+When grow, shrink, linked selection or a group assignment changes nothing, the window says why, for example `Everything is already selected.` · `Nothing to shrink.` · `The selection is already linked.` · `These faces are already in G{n}. Nothing changed.`
 
 ## Separate {#분리}
 
@@ -182,8 +188,8 @@ Open **Painted region tools** under `Select & Move` to work on the selected targ
 You can do three things with a painted area.
 
 - **Delete painted faces**: removes the painted triangles and cleans up vertices that are no longer used.
-- **Hide the painted part with a Shrink key**: creates a new shape key that moves the area inside the garment or hair. The base vertices stay as they are, and the preview is at 100%.
-- **Partial reduction**: reduces the vertex count using the painted strength and the protect strength. You can then make a Shrink key on the same area of the reduced topology.
+- **Hide painted region with Shrink shape**: creates a new shape key that moves the area inside the garment or hair. The base vertices stay as they are, and the preview is at 100%.
+- **Partial reduction**: reduces the vertex count using the painted strength and the protect strength. `Preview reduction counts` calculates the result first, and `Apply preview result` applies it. You can then make a Shrink key on the same area of the reduced topology.
 
 Keep these points in mind.
 

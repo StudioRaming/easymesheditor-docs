@@ -28,6 +28,8 @@ During saving, vertices that no triangle uses are cleaned up once. → [Save Mes
 
 The mesh object inside the asset is renamed to match the file name.
 
+A `<source name>_Edit.asset` made by 0.1.x is not treated as an output of 1.0. Saving the same mesh again with `Save Mesh` in 1.0 does not overwrite it. It creates `<source name>_Edit 1.asset`, and the renderer uses the new file.
+
 ## `_Part.asset`
 
 When you separate pieces on `Select & Move` and then run `Save Mesh`, one `_Part` asset is created for each piece. Each piece becomes a new GameObject in the scene, and that renderer uses the asset.

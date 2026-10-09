@@ -41,6 +41,8 @@ Before you start editing, the window shows a start card with four steps.
 3. Choose a mode (pick a tab)
 4. Save Mesh
 
+While Play Mode holds your edits, the start card says `Your edits are kept`; they come back when Play stops, and `Load` is unavailable in Play Mode.
+
 ## Easy start and Expert views
 
 The window has two views: **Easy start** and **Expert**. Easy start shows the settings you use most often first. Expert opens the detailed settings too. Edit values and work stay the same in either view. You can open the detailed settings from `Detailed settings`.
@@ -62,9 +64,9 @@ If you loaded several meshes, use the `Active target` selector to choose the tar
 
 | Badge | Meaning |
 |---|---|
-| `Saved` | Nothing has changed since `Load` |
-| `Unsaved` | There are unsaved edits |
-| `In transaction` | A shape key edit is in progress and not confirmed yet |
+| `SAVED` | Nothing has changed since `Load` |
+| `UNSAVED` | There are unsaved edits |
+| `EDITING KEY` | A shape key edit is in progress and not confirmed yet |
 
 In a narrow window the badge is shortened. The full text stays in the tooltip.
 
@@ -96,6 +98,8 @@ The status line at the bottom of the window shows the result of the last action 
 ## Recovery banner
 
 If Unity closed unexpectedly, the window shows a recovery banner the next time it opens. Press `Restore` to return the session to the last checkpoint. `Discard` needs two presses within 5 seconds. A file that cannot be restored is not deleted. → [Session and undo](/internals/session-and-undo#크래시-대비)
+
+The recovery banner tells the cases apart. If the scene file the edits were made in cannot be found (deleted, or not imported yet), the recovery files are kept and checked again when importing finishes. If the target objects are not in the open scenes, the edits cannot be restored and can only be removed with `Delete N edit(s)`, which needs a second press within 5 seconds and changes no scene or asset.
 
 ## Save options when the scene is unsaved
 

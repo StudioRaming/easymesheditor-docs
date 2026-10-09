@@ -38,7 +38,7 @@ Editing state (selection, mask, hidden elements, undo history, shape key values,
 | `Range display` | 0.05 to 1 | 0.9 |
 | Pressure size / Pressure strength | 0 to 100% each | 0% / 100% |
 | `Symmetry` X / Y / Z | On / off | Off |
-| `Show symmetry plane` | On / off | On |
+| `Plane` | On / off | On |
 | Mask method | `Island` · `Brush` · `Box` | Island |
 | Brush presets | 3 slots | Empty |
 | X-Ray | On / off | Off |
@@ -54,7 +54,7 @@ Editing state (selection, mask, hidden elements, undo history, shape key values,
 | `Connected Only` | On / off | On |
 | `Symmetry` X / Y / Z | On / off | Off |
 | `Pivot` | Median point · Individual origins · Active element · Bounding box center | Median point |
-| `Per-mesh pivot` | On / off | Off |
+| `Equal weight per mesh` | On / off | Off |
 | `Show normals`, normal length | On / off, length value | Off, 0.02 |
 | `Merge distance` | 0 or more | 0.0001 |
 | X-Ray | On / off | Off |
@@ -75,16 +75,16 @@ Editing state (selection, mask, hidden elements, undo history, shape key values,
 |---|---|---|
 | Brush | Add · Subtract · Smooth · Blur · Average | Add |
 | `Radius` / `Strength` / `Falloff` | Same kinds as Shape | 0.05 / 0.5 / Smooth |
-| `Show weights`, `Display strength` | On / off, 0 to 1 | On, 0.6 |
-| `Show bones in Scene` | On / off | On |
-| `Only bones with weights` | On / off | On |
+| `Show Weights`, `Overlay Blend` | On / off, 0 to 1 | On, 0.6 |
+| `Show Bones in Scene` | On / off | On |
+| `Only bones with weight` | On / off | On |
 | `Auto Normalize` | On / off | On |
-| `Maximum bone influences` | 1 to 4 | 4 |
+| `Max Influences` | 1 to 4 | 4 |
 | `Symmetric Paint` | On / off | Off |
 | `Iterations` (smooth checked bones) | 1 to 20 | 3 |
 | `Strength` (smooth checked bones) | 0 to 1 | 0.5 |
 | `Max distance` (transfer weights) | Distance value | 0.02 |
-| `Apply to` (transfer weights) | Whole mesh · Weights of checked bones only · Vertices without weights only | Whole mesh |
+| `Scope` (transfer weights) | Whole mesh · Weights of checked bones only · Vertices without weights only | Whole mesh |
 | `Ignore source transform` | On / off | Off |
 | Bone lock (`L`) | Per bone | No lock |
 

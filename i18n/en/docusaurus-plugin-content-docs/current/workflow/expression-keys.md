@@ -23,7 +23,7 @@ Assumptions: a `SkinnedMeshRenderer` is loaded, and you are on the `Shape Keys` 
 
 A new key starts from the **absolute shape you see on screen now**. If other keys are on, you sculpt on top of that shape.
 
-Press `Set all values to 0` to bring every key down to 0 before you start. Leave keys on only when you want to build a key on top of a specific expression.
+Press `Reset All to 0` to bring every key down to 0 before you start. Leave keys on only when you want to build a key on top of a specific expression.
 
 ## 2. Sculpt one side {#2-한쪽만-조형}
 

@@ -36,7 +36,7 @@ When you select elements in several meshes, one **world-space gizmo** transforms
 - `G` / `R` / `S` [modal transforms](/guides/edit#모달-변형) use world axes. Several meshes do not have one shared local axis.
 - `A` (select all), `Alt+A` (clear), and `Ctrl+I` (invert) apply to every target.
 
-Turn on `Per-mesh pivot` under [Pivot](/guides/edit#피벗) to give each mesh its own pivot.
+Turn on `Equal weight per mesh` under [Pivot](/guides/edit#피벗) to compute the shared pivot with the same weight for each mesh instead of by vertex count.
 
 Symmetry partners, selection, and brush influence are always calculated for each mesh separately.
 

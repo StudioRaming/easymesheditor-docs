@@ -49,11 +49,11 @@ The badge on the target row shows the current state.
 
 | Badge | Meaning |
 |---|---|
-| `Saved` | Nothing has changed since `Load` |
-| `Unsaved` | There are unsaved edits |
-| `In transaction` | A shape key edit is not confirmed yet |
+| `SAVED` | Nothing has changed since `Load` |
+| `UNSAVED` | There are unsaved edits |
+| `EDITING KEY` | A shape key edit is not confirmed yet |
 
-While the badge shows `In transaction`, `Save Mesh` is blocked. Use the bar pinned at the top of the window to press `Save` (confirm the key edit) or `Cancel Key Edit` first. → [Shape Keys](/guides/blendshape#기존-키-편집)
+While the badge shows `EDITING KEY`, `Save Mesh` is blocked. Use the bar pinned at the top of the window to press `Save` (confirm the key edit) or `Cancel Key Edit` first. → [Shape Keys](/guides/blendshape#기존-키-편집)
 
 ## 5. Finish with `Save Mesh`
 
@@ -61,6 +61,7 @@ When you are done, press `Save Mesh`.
 
 - `<source name>_Edit.asset` is created next to the source, and the renderer switches to that asset.
 - Vertices that no face uses are cleaned up once at this point.
+- Only meshes that changed are saved. A mesh with no changes is skipped, and the confirmation names how many are skipped. If no mesh changed, the window says `Nothing to save: no mesh was changed. The session stays open.` and the session stays open.
 - The session ends. To keep working, press `Load` again.
 
 If you edited several meshes together, a result table appears for each target. A session whose save failed stays open, so you can fix the cause and try again. → [Generated files](/reference/output-files)

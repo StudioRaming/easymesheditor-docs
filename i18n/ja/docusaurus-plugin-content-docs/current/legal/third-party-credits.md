@@ -25,7 +25,7 @@ Unity エンジンの API は Unity Technologies のものであり、この製�
 
 ## アルゴリズムの参照
 
-`形を整える` タブの `引っぱる (1)` ブラシは、下の論文の変形モデルに基づいています。コードを取り込んだわけではなく、公開されている数式を参照して独自に実装しているため、ライセンス上の義務ではなく**出典の表記**です。
+`形を整える` タブの `引っぱる（1）` ブラシは、下の論文の変形モデルに基づいています。コードを取り込んだわけではなく、公開されている数式を参照して独自に実装しているため、ライセンス上の義務ではなく**出典の表記**です。
 
 > Fernando de Goes, Doug L. James. *Regularized Kelvinlets: Sculpting Brushes based on Fundamental Solutions of Elasticity.* ACM Transactions on Graphics (SIGGRAPH), 2017.
 

@@ -22,8 +22,8 @@ If no bone is chosen, the tab tells you that you cannot paint yet.
 |---|---|
 | Search | Filters by name |
 | Expand / Collapse | Expands or collapses the whole tree |
-| Show bones in Scene | Draws the bones in the Scene view |
-| Only bones with weights | Keeps only the bones that actually have weights |
+| Show Bones in Scene | Draws the bones in the Scene view |
+| Only bones with weight | Keeps only the bones that actually have weights. It is on at first and remembers your last choice |
 
 You can also choose bones in the Scene view.
 
@@ -61,7 +61,7 @@ Turn on the heatmap to see the weights as vertex colors. The colors run from blu
 ## Auto normalize and maximum bone influences {#자동-정규화와-최대-영향-본-수}
 
 - **Auto Normalize**: when on, the weight sum of each vertex is set back to 1 after every stroke. It is on by default.
-- **Maximum bone influences**: limits how many bones one vertex can have.
+- **Max Influences**: limits how many bones one vertex can have.
 
 With auto normalize off, the tool adds and subtracts without normalizing. The sum may then not be 1, so press `Normalize All` when you finish. Even if you turn it off and save anyway, the tool normalizes any vertex whose sum is not 1 just before `Save Mesh`, and tells you how many it fixed.
 
@@ -104,8 +104,8 @@ Move all weights of bone A to bone B. After the move, A has zero weight, so you 
 
 | Button | What it does |
 |---|---|
-| Merge active bone into parent | Moves the active bone's weights to its parent |
-| Merge checked bones into active bone | Moves the checked bones' weights to the active bone |
+| Merge active bone into parent (parent name) | Moves the active bone's weights to its parent |
+| Merge N checked bone(s) into the active bone | Moves the checked bones' weights to the active bone |
 
 The target is either the parent bone or another bone. If the source and the target are the same, or the bone is locked, the merge does not happen.
 
@@ -117,10 +117,10 @@ If you set a mesh that already has weights as the source, such as an avatar body
 
 1. Put a `SkinnedMeshRenderer` that already has weights into `Source mesh`.
 2. Set `Max distance`.
-3. Choose `Apply to`.
+3. Choose `Scope`.
 4. Press `Transfer Weights`.
 
-| `Apply to` | Target |
+| `Scope` | Target |
 |---|---|
 | Whole mesh | All vertices |
 | Weights of checked bones only | Only the influence of the checked bones |
@@ -130,7 +130,7 @@ The result reports how many vertices were applied, how many were out of range, a
 
 ### When the spaces do not match {#전송-공간}
 
-Weights are bind pose data, so the two meshes must be in the same space for the matching points to line up. If the transforms of the source and target renderers differ, the window warns you. If the result is off, turn on `Ignore source transform (match in bind pose local space)` and run it again. This option matches in bind pose local space instead of world transforms.
+Weights are bind pose data, so the two meshes must be in the same space for the matching points to line up. If the transforms of the source and target renderers differ, the window warns you. If the result is off, turn on `Ignore source transform (match in bind-pose local space)` and run it again. This option matches in bind-pose local space instead of world transforms.
 
 ## How weights are stored
 

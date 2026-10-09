@@ -13,7 +13,7 @@ sidebar_position: 1
 | 항목 | 내용 |
 |---|---|
 | 제품 버전 | `1.0.0` |
-| 지원 Unity | **2019.4 · 2021.3 · 2022.3 · 6000.0 · 6000.3 (LTS)** |
+| 지원 Unity | **Unity 2019.4 ~ Unity 6 (6000.0, 6000.3 LTS)** |
 | 직접 컴파일을 검증한 버전 | `2019.4.31f1` · `2021.3.45f2` · `2022.3.22f1` (경고를 오류로 처리한 빌드) |
 | 렌더 파이프라인 | Built-in Render Pipeline · URP |
 | 실행 범위 | Unity Editor 전용 |
@@ -28,8 +28,7 @@ Easy Mesh Editor는 메쉬 데이터를 편집하는 에디터 도구입니다. 
 
 ## 2. `.unitypackage`로 설치
 
-1. Unity에서 `Assets > Import Package > Custom Package`를 고르고 제공된 `.unitypackage`를 엽니다.
-   <!-- CONFIRM: package file name EasyMeshEditor_v1.0.0.unitypackage is pending 라밍 decision D4 -->
+1. Unity에서 `Assets > Import Package > Custom Package`를 고르고 제공된 `EasyMeshEditor_v1.0.0.unitypackage`를 엽니다.
 2. `Assets/StudioRaming/EasyMeshEditor` 아래 파일을 **모두** Import합니다.
 3. 메뉴에서 `StudioRaming > Easy Mesh Editor`를 엽니다.
 
@@ -54,11 +53,13 @@ Easy Mesh Editor는 메쉬 데이터를 편집하는 에디터 도구입니다. 
 
 ## 5. 0.1.x에서 올리기 {#0-1x에서-올리기}
 
+**0.1.x 구매자는 1.0.0을 무료로 업데이트할 수 있습니다.**
+
 편집 세션을 연 채로 업데이트하지 마세요. 열려 있는 편집은 `메쉬 저장`으로 저장하거나 `편집 버리기`로 버린 뒤, Easy Mesh Editor 창을 닫고 업데이트합니다.
 
 기존 `Assets/StudioRaming/EasyMeshEditor` 폴더 위에 1.0.0을 덮어쓰기 임포트하면 됩니다. 0.1.x에서 올릴 때 따로 지워야 할 파일은 없습니다. 예외는 소스(`.cs`) 판을 설치했던 프로젝트입니다. 이 경우에는 먼저 소스 판을 지우세요. 폴더 안에 직접 만든 파일이 있다면 먼저 밖으로 옮겨 두세요.
 
-이미 만든 `_Edit.asset`을 쓰는 렌더러를 다시 `불러오기` 하고 `메쉬 저장`을 누르면, 1.0이 만든 출력은 같은 파일을 GUID를 유지한 채 갱신합니다. 0.1.x가 만든 `_Edit.asset`에는 소유 표식이 없어서 갱신하지 않고, 옆에 새 파일을 만듭니다. 새 파일은 새 GUID를 가지므로, 이전 파일을 참조하는 프리팹이나 애니메이션은 새 파일로 다시 연결해야 합니다.
+이미 만든 `_Edit.asset`을 쓰는 렌더러를 다시 `불러오기` 하고 `메쉬 저장`을 누르면, 1.0이 만든 출력은 같은 파일을 GUID를 유지한 채 갱신합니다. 0.1.x가 만든 `_Edit.asset`에는 소유 표식이 없어서 갱신하지 않고, 옆에 `<원본명>_Edit 1.asset`을 새로 만듭니다. 0.1.x가 저장한 `_Edit.asset`은 그대로 남고 계속 동작합니다. 새 파일은 새 GUID를 가지므로, 이전 파일을 참조하는 프리팹이나 애니메이션은 새 파일로 다시 연결해야 합니다.
 
 ## 6. 창 열기
 

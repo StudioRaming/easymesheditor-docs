@@ -13,7 +13,7 @@ sidebar_position: 1
 | Item | Details |
 |---|---|
 | Product version | `1.0.0` |
-| Supported Unity | **2019.4 · 2021.3 · 2022.3 · 6000.0 · 6000.3 (LTS)** |
+| Supported Unity | **Unity 2019.4 ~ Unity 6 (6000.0, 6000.3 LTS)** |
 | Versions checked with a direct compile | `2019.4.31f1` · `2021.3.45f2` · `2022.3.22f1` (builds with warnings treated as errors) |
 | Render pipeline | Built-in Render Pipeline · URP |
 | Scope | Unity Editor only |
@@ -28,8 +28,7 @@ Easy Mesh Editor is an editor tool that edits mesh data. Leave the shaders and m
 
 ## 2. Install with `.unitypackage`
 
-1. In Unity, choose `Assets > Import Package > Custom Package` and open the `.unitypackage` you were given.
-   <!-- CONFIRM: package file name EasyMeshEditor_v1.0.0.unitypackage is pending 라밍 decision D4 -->
+1. In Unity, choose `Assets > Import Package > Custom Package` and open `EasyMeshEditor_v1.0.0.unitypackage`.
 2. Import **all** files under `Assets/StudioRaming/EasyMeshEditor`.
 3. Open `StudioRaming > Easy Mesh Editor` from the menu.
 
@@ -54,11 +53,13 @@ If a project still has the source `.cs` files and you also add the DLL edition, 
 
 ## 5. Upgrading from 0.1.x {#0-1x에서-올리기}
 
+**Buyers of 0.1.x update to 1.0.0 for free.**
+
 Do not update while an editing session is open. Save the open edits with `Save Mesh` or throw them away with `Discard edits`, close the Easy Mesh Editor window, and then update.
 
 Import 1.0.0 over the existing `Assets/StudioRaming/EasyMeshEditor` folder. You do not need to delete any other file when you upgrade from 0.1.x. The exception is a project that installed the source (`.cs`) edition. In that case, delete the source edition first, as the README says. If you put your own files inside that folder, move them out first.
 
-If a renderer that uses an `_Edit.asset` is loaded again and you press `Save Mesh`, a 1.0 output is updated in the same file and keeps its GUID. An `_Edit.asset` made by 0.1.x has no owner record, so it is not updated. A new file is written next to it with a new GUID. Prefabs and animations that refer to the old file must be re-linked to the new one.
+If a renderer that uses an `_Edit.asset` is loaded again and you press `Save Mesh`, a 1.0 output is updated in the same file and keeps its GUID. An `_Edit.asset` made by 0.1.x has no owner record, so it is not updated. A new file, `<source name>_Edit 1.asset`, is written next to it with a new GUID. The `_Edit.asset` you saved in 0.1.x stays and keeps working. Prefabs and animations that refer to the old file must be re-linked to the new one.
 
 ## 6. Open the window
 

@@ -18,7 +18,7 @@ Each row has a name, a value slider, and a number field.
 
 - Values run from `0` to `100`, and the preview updates in real time.
 - Drag the name or the value left and right to change the value. Hold `Shift` for fine adjustment.
-- `Set all values to 0` resets every key at once.
+- `Reset All to 0` resets every key at once.
 
 Use the search box above the list to filter by name.
 
@@ -76,7 +76,7 @@ Set the name in the key name field. A `/` or a line break in a key name is repla
 
 ## Edit an existing key {#기존-키-편집}
 
-Edit a key in the list, and the tool loads that key's **shape at 100% on its last frame** as a solo preview. The badge changes to `In transaction`, and a bar pinned to the window appears.
+Edit a key in the list, and the tool loads that key's **shape at 100% on its last frame** as a solo preview. The badge changes to `EDITING KEY`, and a bar pinned to the window appears.
 
 You can move to `Shape` and `Select & Move` while the edit is open. When you finish, choose one of these in the pinned bar.
 
@@ -105,8 +105,8 @@ If `Ctrl+Z` goes back earlier than the point where the key edit started, the edi
 
 If you change the mesh in `Shape` or `Select & Move` with no key selected, you have edited the base shape. The Shape Keys tab offers two choices.
 
-- `Confirm as new key`: turns the change into a new key.
-- `Revert base shape edits`: restores the base shape to its state before the edit.
+- `Commit as New Key`: turns the change into a new key.
+- `Revert Base Edits`: restores the base shape to its state before the edit.
 
 If you press `Save Mesh` in this state, the window asks again whether to bake into the base shape or to confirm as a new key.
 
@@ -144,14 +144,14 @@ Vertex pairs are found with the same spatial matching as symmetry on `Shape`. A 
 
 If no pair is found, no mirror key is created. If the mesh is asymmetric from the start, you must sculpt the other side by hand.
 
-### Import keys from another mesh {#키-전송}
+### Transfer keys from another mesh {#키-전송}
 
 Use this section to move the shape keys of a face mesh to another mesh, such as a new hair or prop. It uses proximity mapping to find matching points.
 
 1. Choose `Source mesh`. Its key list appears.
-2. Check the keys to import. `Select all` and `Clear all` are available.
+2. Check the keys to import. `Select all` and `Select none` are available.
 3. Set `Max distance`. Matching points are searched within this distance.
-4. Press `Import`.
+4. Press `Transfer`.
 
 Vertices that find no match stay where they are. If many vertices are left out, increase the max distance. Locked keys are skipped. If a key with the same name already exists, the tool asks whether to replace it.
 
@@ -178,4 +178,6 @@ When several meshes are edited together, every target must be a `SkinnedMeshRend
 
 The list shows **only the keys whose names match on every target**. Indexes may differ. Values, editing, and management apply to all meshes at the same time. If there are no common keys, the list is empty, and a new key is added to every mesh under the same name. → [Multiple meshes](/guides/multi-mesh)
 
-<!-- CONFIRM: MingToon Face Proxy is described in the 1.0 README but kept out of public copy until the MingToon public version and link status are confirmed (DRAFT_NOTES F4). -->
+## MingToon face proxy {#mingtoon-페이스-프록시}
+
+This link needs the latest MingToon. When MingToon opens a face proxy source, Easy Mesh Editor starts a session on that source mesh. While you edit, the face renderer is hidden, and only the `Shape` tab and the `Select & Move` tab (vertex moves) are available. Operations that change the mesh structure, such as delete, separate, merge, normal changes, and new keys, are locked. `Save Mesh` hands the result to MingToon, and `Discard edits` leaves the source as it was.

@@ -9,6 +9,10 @@ slug: /
 
 **A mesh editing tool that works inside the Unity Scene view.**
 
+:::info[Buyers of 0.1.x update for free]
+Before updating, save any open edits with `Save Mesh` or discard them with `Discard edits`, and close the Easy Mesh Editor window. If you installed the source (.cs) edition before, delete it first. Then import the new `.unitypackage` over the existing `Assets/StudioRaming/EasyMeshEditor` folder. Your `_Edit.asset` files from 0.1.x stay and keep working. Saving the same mesh again in 1.0 creates a new `<source name>_Edit 1.asset`. → [Upgrading from 0.1.x](/getting-started/installation#0-1x에서-올리기)
+:::
+
 You do not need to leave the project to fix a mesh. Push surfaces, move vertices, make shape keys, and paint skin weights on the pose you are looking at, with the avatar already dressed. The round trip of re-exporting the FBX, re-importing it, and re-linking materials, physics, and prefab references goes away.
 
 It is built for people who make VRChat and WARUDO avatars and clothing. Pressing in the spot where clothing cuts into the body, moving weights onto new parts, and mirroring shape keys left and right are the tasks that take real time, and they all live in this one window.

@@ -68,7 +68,7 @@ Turn on symmetry by combining X / Y / Z in `Symmetry`. The Scene view shortcuts 
 The left and right topology does not have to be identical. The tool finds matching points by spatial position. A vertex with no match is left out of the symmetric edit.
 :::
 
-Turn on `Show symmetry plane` to draw the mirror plane and the brush cursor on the opposite side in the Scene view. Check which axis the symmetry uses before you start.
+Turn on `Plane` to draw the mirror plane and the brush cursor on the opposite side in the Scene view. Check which axis the symmetry uses before you start.
 
 ## Mask mode {#마스크-모드}
 

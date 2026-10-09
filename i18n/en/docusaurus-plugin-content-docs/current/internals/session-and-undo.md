@@ -61,7 +61,7 @@ Snapshots use memory, so there is a limit. When the limit is reached, the oldest
 
 Creating a new key and editing an existing key both take several steps, and the intermediate state must not be saved. So each one is wrapped in a clear start and end. This wrapper is called a transaction.
 
-- When it starts, the badge changes to `In transaction`, and a bar is pinned in the Scene view and the window.
+- When it starts, the badge changes to `EDITING KEY`, and a bar is pinned in the Scene view and the window.
 - `Enter` confirms, and `Esc` cancels the stroke. `Esc` does not discard the key edit.
 - While the edit is open, both `Save Mesh` and `Save as New Key` are blocked.
 
@@ -101,6 +101,10 @@ While there are unsaved edits, and only when the content has changed, the tool w
 - `Discard`: needs two presses within 5 seconds to run.
 
 A file that cannot be restored is not deleted.
+
+The banner tells the cases apart. If the scene file the edits were made in cannot be found (deleted, or not imported yet), the recovery files are kept and checked again when importing finishes. If the target objects are not in the open scenes, the edits cannot be restored and can only be removed with `Delete N edit(s)`, which needs a second press within 5 seconds and changes no scene or asset.
+
+While Play Mode holds your edits, the start card says `Your edits are kept`; they come back when Play stops, and `Load` is unavailable in Play Mode.
 
 ## How a session ends {#세션이-끝나는-방법}
 
