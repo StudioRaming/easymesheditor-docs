@@ -19,7 +19,6 @@ Easy Mesh Editor `1.0.0` パッケージには、外部ライブラリ、オー�
 - エディターのアイコン画像（PNG ファイル）
 - `README.md`
 
-<!-- CONFIRM: the package file list is checked against the dry-run package (no third-party notice file, no license strings in the EME sources). Whether the obfuscated DLL contains third-party code is not verified (S1). -->
 
 Unity エンジンの API は Unity Technologies のものであり、この製品に再配布されません。
 

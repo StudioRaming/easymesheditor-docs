@@ -19,7 +19,6 @@ Easy Mesh Editor `1.0.0` 패키지에는 외부 라이브러리나 오픈소스 
 - 에디터 아이콘 이미지(PNG 파일)
 - `README.md`
 
-<!-- CONFIRM: the package file list is checked against the dry-run package (no third-party notice file, no license strings in the EME sources). Whether the obfuscated DLL contains third-party code is not verified (S1). -->
 
 
 Unity 엔진 API는 Unity Technologies의 것이며 이 제품에 재배포되지 않습니다.

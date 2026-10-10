@@ -19,7 +19,6 @@ The Easy Mesh Editor `1.0.0` package contains no external libraries, open-source
 - Editor icon images (PNG files)
 - `README.md`
 
-<!-- CONFIRM: the package file list is checked against the dry-run package (no third-party notice file, no license strings in the EME sources). Whether the obfuscated DLL contains third-party code is not verified (S1). -->
 
 The Unity Engine API belongs to Unity Technologies and is not redistributed with this product.
 
