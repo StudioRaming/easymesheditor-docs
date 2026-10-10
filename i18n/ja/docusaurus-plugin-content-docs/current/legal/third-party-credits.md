@@ -27,6 +27,12 @@ Unity エンジンの API は Unity Technologies のものであり、この製�
 
 ウィンドウの説明が示す動作は、ここから来ています。正規化 Kelvinlet と C2 のソフトテールにより、境界で途切れずに広がります。→ [形を整える](/guides/sculpt#엘라스틱)
 
+次の手法は、以下の文献に記載された方法を使用しています。これも**出典の表記**です。
+
+- 三角形上の最近接点の計算: Christer Ericson, *Real-Time Collision Detection*, 2004.
+- 光線と三角形の交差判定: Tomas Möller, Ben Trumbore, *Fast, Minimum Storage Ray/Triangle Intersection*, 1997.
+- 二次誤差メトリクス（quadric error metrics）によるメッシュの簡略化: Michael Garland, Paul Heckbert, *Surface Simplification Using Quadric Error Metrics*, SIGGRAPH 1997.
+
 ## この製品のライセンス
 
 同梱の DLL、シェーダー、アセットファイルの再配布、再販売、流出は禁止されています。

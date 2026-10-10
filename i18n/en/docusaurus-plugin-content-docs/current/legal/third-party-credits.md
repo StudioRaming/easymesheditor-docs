@@ -27,6 +27,12 @@ The `Pull (1)` brush on the `Shape` tab is based on the deformation model in the
 
 The behavior described in the window is here. A regularized Kelvinlet with a C2 soft tail spreads the deformation without a hard boundary. → [Shape](/guides/sculpt#엘라스틱)
 
+The following methods are used as described in the works below. This is also a **source credit**.
+
+- Closest point on a triangle: Christer Ericson, *Real-Time Collision Detection*, 2004.
+- Ray-triangle intersection: Tomas Möller and Ben Trumbore, *Fast, Minimum Storage Ray/Triangle Intersection*, 1997.
+- Mesh simplification with quadric error metrics: Michael Garland and Paul Heckbert, *Surface Simplification Using Quadric Error Metrics*, SIGGRAPH 1997.
+
 ## License of this product
 
 Redistribution, resale, and leakage of the included DLL, shaders, and asset files are prohibited.

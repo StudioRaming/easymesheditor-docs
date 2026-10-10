@@ -27,6 +27,12 @@ Unity 엔진 API는 Unity Technologies의 것이며 이 제품에 재배포되�
 
 창의 설명이 말하는 동작이 여기서 나옵니다. 정규화 Kelvinlet과 C2 소프트 테일로 경계가 끊기지 않고 퍼집니다. → [모양 다듬기](/guides/sculpt#엘라스틱)
 
+다음 방법은 아래 문헌에 설명된 것을 사용합니다. 이 항목도 **출처 표기**입니다.
+
+- 삼각형 위의 최근접점 계산: Christer Ericson, *Real-Time Collision Detection*, 2004.
+- 광선과 삼각형의 교차 판정: Tomas Möller, Ben Trumbore, *Fast, Minimum Storage Ray/Triangle Intersection*, 1997.
+- 쿼드릭 오차 척도(quadric error metrics)를 쓰는 메쉬 단순화: Michael Garland, Paul Heckbert, *Surface Simplification Using Quadric Error Metrics*, SIGGRAPH 1997.
+
 ## 이 제품의 라이선스
 
 포함된 DLL, 셰이더, 에셋 파일의 재배포, 재판매, 유출을 금지합니다.
