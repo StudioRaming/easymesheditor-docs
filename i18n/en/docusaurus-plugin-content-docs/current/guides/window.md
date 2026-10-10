@@ -101,6 +101,8 @@ If Unity closed unexpectedly, the window shows a recovery banner the next time i
 
 The recovery banner tells the cases apart. If the scene file the edits were made in cannot be found (deleted, or not imported yet), the recovery files are kept and checked again when importing finishes. If the target objects are not in the open scenes, the edits cannot be restored and can only be removed with `Delete N edit(s)`, which needs a second press within 5 seconds and changes no scene or asset.
 
+If the original mesh changed after the edit was preserved (a reimport or another tool changed its vertex count, vertex positions or weights), the edit is not restored over the changed mesh. It is saved as `<mesh name>_recovered.asset` beside the original, and the current mesh is left as it is. If it cannot be saved, the edit stays in the recovery files.
+
 ## Save options when the scene is unsaved
 
 If the scene you are editing has never been saved, the window shows a notice. Press `Save Scene` in the notice to save the scene. Press `Discard edits` to throw the edit away. Objects in a scene that was never saved cannot keep their edits, so save the scene first. → [Session and undo](/internals/session-and-undo#자동-보존과-복원)
