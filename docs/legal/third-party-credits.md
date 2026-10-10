@@ -6,26 +6,22 @@ sidebar_position: 92
 
 # 제3자 표기
 
-**이 문서를 읽으면** 이 제품에 다른 곳의 코드가 들어 있는지, 알고리즘을 어디서 참조했는지 알 수 있습니다.
+**이 문서를 읽으면** 패키지에 무엇이 들어 있는지, 알고리즘을 어디서 참조했는지 알 수 있습니다.
 
-## 포함된 제3자 코드
+## 패키지 구성
 
-**없습니다.**
+Easy Mesh Editor `1.0.0` 패키지에 들어 있는 것은 다음과 같습니다.
 
-Easy Mesh Editor `1.0.0` 패키지에는 외부 라이브러리나 오픈소스 코드, 제3자 고지 파일이 포함되어 있지 않습니다. 배포되는 것은 다음과 같습니다.
-
-- `Editor/EasyMeshEditor.Editor.dll`: Studio Raming이 작성한 코드(난독화된 빌드)
-- `Editor/Shaders/EmeOverlay.shader`, `Editor/Shaders/EmeSceneGL.shader`: Studio Raming이 작성한 씬뷰 표시용 셰이더
+- `Editor/EasyMeshEditor.Editor.dll`(난독화된 빌드)
+- `Editor/Shaders/EmeOverlay.shader`, `Editor/Shaders/EmeSceneGL.shader`: 씬뷰 표시용 셰이더
 - 에디터 아이콘 이미지(PNG 파일)
 - `README.md`
-
-
 
 Unity 엔진 API는 Unity Technologies의 것이며 이 제품에 재배포되지 않습니다.
 
 ## 알고리즘 참조
 
-`모양 다듬기` 탭의 `잡아당기기 (1)` 브러시는 아래 논문의 변형 모델을 바탕으로 합니다. 코드를 가져온 것이 아니라 공개된 수식을 참조해 직접 구현했으므로, 라이선스 의무가 아니라 **출처 표기**입니다.
+`모양 다듬기` 탭의 `잡아당기기 (1)` 브러시는 아래 논문의 변형 모델을 바탕으로 합니다. 이 항목은 **출처 표기**입니다.
 
 > Fernando de Goes, Doug L. James. *Regularized Kelvinlets: Sculpting Brushes based on Fundamental Solutions of Elasticity.* ACM Transactions on Graphics (SIGGRAPH), 2017.
 

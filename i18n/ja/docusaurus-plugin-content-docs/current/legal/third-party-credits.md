@@ -6,25 +6,22 @@ sidebar_position: 92
 
 # サードパーティの表記
 
-**このページを読むと** この製品に他所のコードが含まれているかどうか、そして参照したアルゴリズムの出典がわかります。
+**このページを読むと** パッケージの内容と、参照したアルゴリズムの出典がわかります。
 
-## 含まれているサードパーティのコード
+## パッケージの内容
 
-**ありません。**
+Easy Mesh Editor `1.0.0` パッケージには次のものが入っています。
 
-Easy Mesh Editor `1.0.0` パッケージには、外部ライブラリ、オープンソースのコード、サードパーティの告知ファイルは含まれていません。配布されるのは次のとおりです。
-
-- `Editor/EasyMeshEditor.Editor.dll`: Studio Raming が作成したコード（難読化されたビルド）
-- `Editor/Shaders/EmeOverlay.shader` · `Editor/Shaders/EmeSceneGL.shader`: Studio Raming が作成した、シーンビューの表示用のシェーダー
+- `Editor/EasyMeshEditor.Editor.dll`（難読化されたビルド）
+- `Editor/Shaders/EmeOverlay.shader` · `Editor/Shaders/EmeSceneGL.shader`: シーンビューの表示用のシェーダー
 - エディターのアイコン画像（PNG ファイル）
 - `README.md`
-
 
 Unity エンジンの API は Unity Technologies のものであり、この製品に再配布されません。
 
 ## アルゴリズムの参照
 
-`形を整える` タブの `引っぱる（1）` ブラシは、下の論文の変形モデルに基づいています。コードを取り込んだわけではなく、公開されている数式を参照して独自に実装しているため、ライセンス上の義務ではなく**出典の表記**です。
+`形を整える` タブの `引っぱる（1）` ブラシは、下の論文の変形モデルに基づいています。これは**出典の表記**です。
 
 > Fernando de Goes, Doug L. James. *Regularized Kelvinlets: Sculpting Brushes based on Fundamental Solutions of Elasticity.* ACM Transactions on Graphics (SIGGRAPH), 2017.
 
